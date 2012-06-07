@@ -3,7 +3,7 @@ layout: post
 title: "Class Methods in OCMock"
 date: 2012-06-06 16:09
 comments: true
-categories: [UnitTesting, MockObjects, OCMock, Objective-C]
+categories: [UnitTesting, MockObjects, OCMock, Objective-C, iOS]
 ---
 
 I'm opening my blog with a post about patches I've made to [OCMock](http://ocmock.org) to handle mocking and stubbing class methods. You can find my fork [HERE](https://github.com/kykim/ocmock).
