@@ -3,7 +3,7 @@ layout: post
 title: "Parable of the Day"
 date: 2012-07-23 16:09
 comments: true
-categories: parable, rowing, management, humor
+categories: [parable, rowing, management, humor]
 ---
 
 The Americans and the Japanese decided to engage in a boat race. Both
