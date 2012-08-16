@@ -7,6 +7,6 @@ categories: [osx, utility, onethingwell, caffeinate]
 ---
 
 Really useful when I don't want the display to sleep on me.
-````> caffeinate -d
+    > caffeinate -d
 
 Via [OneThingWell](http://onethingwell.org/post/28407926729/caffeinate).
