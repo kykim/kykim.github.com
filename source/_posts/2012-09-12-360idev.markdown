@@ -1,0 +1,17 @@
+---
+layout: post
+title: "360iDev"
+date: 2012-09-12 16:47
+comments: true
+categories: [360iDev, Pro iOS Tools, Apress]
+---
+
+Been busy the last month working on a new book.
+And I had to take some time off. But not really.
+
+Right now, I'm in Denver, attending [360iDev](http://360idev.com).
+
+<!-- more -->
+
+It's the last day right now, but I did do a book signing for [Pro iOS Tools](http://www.apress.com/9781430236085). Here's a picture:
+{% img https://pbs.twimg.com/media/A2h2oubCUAA9nZq.jpg:medium That's me on the end %}
