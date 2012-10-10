@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://kykim.github.com/
+url: http://kykim.com/
 title: This Is My Blog
 subtitle: There are many like it, but this one is mine.
 author: Kevin Y. Kim
@@ -93,7 +93,7 @@ disqus_short_name: kykim
 disqus_show_comment_count: false
 
 # Google Analytics
-google_analytics_tracking_id: UA-32465939-1
+google_analytics_tracking_id: UA-35462894-1
 
 # Facebook Like
 facebook_like: true

@@ -377,3 +377,37 @@ task :list do
   puts "Tasks: #{(Rake::Task.tasks - [Rake::Task[:list]]).join(', ')}"
   puts "(type rake -T for more detail)\n\n"
 end
+
+###########################################################################
+#
+# Local Additions
+
+## -- Misc Configs -- ##
+
+drafts_dir = "_drafts"    # directory for draft blog files
+
+# usage rake new_draft[my-new-draft] or rake new_draft['my new draft'] or rake new_draft (defaults to "new-draft")
+desc "Begin a new draft post in #{source_dir}/#{drafts_dir}"
+task :new_draft, :title do |t, args|
+  raise "### You haven't set anything up yet. First run `rake install` to set up an Octopress theme." unless File.directory?(source_dir)
+  mkdir_p "#{source_dir}/#{drafts_dir}"
+  args.with_defaults(:title => 'new-draft')
+  title = args.title
+  filename = "#{source_dir}/#{drafts_dir}/#{Time.now.strftime('%Y-%m-%d')}-#{title.to_url}.#{new_post_ext}"
+  if File.exist?(filename)
+    abort("rake aborted!") if ask("#{filename} already exists. Do you want to overwrite?", ['y', 'n']) == 'n'
+  end
+  puts "Creating new draft: #{filename}"
+  open(filename, 'w') do |draft|
+    draft.puts "---"
+    draft.puts "layout: post"
+    draft.puts "title: \"#{title.gsub(/&/,'&amp;')}\""
+    draft.puts "date: "
+    draft.puts "comments: true"
+    draft.puts "categories: "
+    draft.puts "published: false"
+    draft.puts "---"
+  end
+end
+
+
