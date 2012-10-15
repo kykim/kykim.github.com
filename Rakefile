@@ -393,7 +393,8 @@ task :new_draft, :title do |t, args|
   mkdir_p "#{source_dir}/#{drafts_dir}"
   args.with_defaults(:title => 'new-draft')
   title = args.title
-  filename = "#{source_dir}/#{drafts_dir}/#{Time.now.strftime('%Y-%m-%d')}-#{title.to_url}.#{new_post_ext}"
+  date = Time.now + 1000.years
+  filename = "#{source_dir}/#{drafts_dir}/#{date.strftime('%Y-%m-%d')}-#{title.to_url}.#{new_post_ext}"
   if File.exist?(filename)
     abort("rake aborted!") if ask("#{filename} already exists. Do you want to overwrite?", ['y', 'n']) == 'n'
   end
@@ -402,12 +403,36 @@ task :new_draft, :title do |t, args|
     draft.puts "---"
     draft.puts "layout: post"
     draft.puts "title: \"#{title.gsub(/&/,'&amp;')}\""
-    draft.puts "date: "
+    post.puts "date: #{date.strftime('%Y-%m-%d %H:%M')}"
     draft.puts "comments: true"
     draft.puts "categories: "
-    draft.puts "published: false"
     draft.puts "---"
   end
 end
 
+desc "Generate jekyll site including drafts (future posts)"
+task :drafts_gen do
+  raise "### You haven't set anything up yet. First run `rake install` to set up an Octopress theme." unless File.directory?(source_dir)
+  puts "## Generating Site with Jekyll"
+  system "compass compile --css-dir #{source_dir}/stylesheets"
+  system "jekyll --future"
+end
 
+# usage rake drafts
+desc "preview the site with drafts (future posts) in a web browser"
+task :drafts do
+  raise "### You haven't set anything up yet. First run `rake install` to set up an Octopress theme." unless File.directory?(source_dir)
+  puts "Starting to watch source with Jekyll and Compass. Starting Rack on port #{server_port}"
+  system "compass compile --css-dir #{source_dir}/stylesheets" unless File.exist?("#{source_dir}/stylesheets/screen.css")
+#  system "jekyll --future"
+  jekyllPid = Process.spawn({"OCTOPRESS_ENV"=>"preview"}, "jekyll --auto --future")
+  compassPid = Process.spawn("compass watch")
+  rackupPid = Process.spawn("rackup --port #{server_port}")
+
+  trap("INT") {
+    [jekyllPid, compassPid, rackupPid].each { |pid| Process.kill(9, pid) rescue Errno::ESRCH }
+    exit 0
+  }
+
+  [jekyllPid, compassPid, rackupPid].each { |pid| Process.wait(pid) }
+end
