@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Accessing Reminders with EventKit (Part 3)"
-date: 2012-10-18 13:47
+date: 2012-10-18 11:37
 comments: true
 categories: [osx, ios, command-line, Reminders, EventKit]
 ---
@@ -14,7 +14,9 @@ Before working on the handler functions, I want to do one more thing. I want to 
 
 <!-- more -->
 
-Basically, we want to check the reminder list (calendar) name specified and compare it to the known names in the `calendars` dictionary. If the name is valid, then we check to see if the specified reminder id is within the index range of the reminder array for a given reminder list (calendar).
+The `EKCalendarItem` has two identifier properties: `calendarItemIdentifier` and `calendarItemExternalIdentifier`. At first thought, it would be a good idea to use one of those properties as the reminder id. However, both identifier properties return a [GUID](http://en.wikipedia.org/wiki/Globally_unique_identifier), which is great for programming purposes, but not so ideal for a command-line app. So, reminder id will be a simple integer to represent the reminder position in the reminder list.
+
+Basically, we want to check the reminder list  name specified and compare it to the known names in the `calendars` dictionary. If the name is valid, then we check to see if the specified reminder id is within the index range of the reminder array for a given reminder list.
 
 {% codeblock lang:objc %}
 static void validateArguments()
@@ -132,7 +134,7 @@ Reminders
 └── Home
     ├── Pay Electric
     └── Feed Cat
-kykim$
+
 kykim$ ./rem ls Home
 Reminders
 └── Home
@@ -140,7 +142,7 @@ Reminders
     └── Feed Cat
 {% endcodeblock %}
 
-Looks good, but one more tweak. All the other commands use a reminder_id to identify which reminder to use. The identifier properties return a (GUID)[http://en.wikipedia.org/wiki/Globally_unique_identifier], which is great for programming purposes, but not so ideal for a command-line app. I just a simple integer index as the reminder_id. `printReminderLine` and `listCalendar` change to this.
+Looks good, but one more tweak. All the other commands use a reminder_id to identify which reminder to use. Recall, that I'm just printing a simple integer index as the reminder_id. `printReminderLine` and `listCalendar` change to this.
 
 {% codeblock lang:objc %}
 static void _printReminderLine(NSUInteger id, NSString *line, BOOL last, BOOL lastCalendar)
