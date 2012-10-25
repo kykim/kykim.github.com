@@ -5,6 +5,9 @@ date: 2012-10-24 12:38
 comments: true
 categories: [iPad mini, Fusion Drive, Core Storage]
 ---
+<small>
+*Update: [MacObserver](http://www.macobserver.com/tmo/article/digging-into-fusion-drive-details) has a nice simple explanation of how Fusion Drive works. All the magic is in OSX and Core Storage*
+</small>
 
 Apple announced what was probably the worst kept secret yesterday: the iPad mini. Pretty much what everyone expected and people with more access than me covered it [here](http://www.theverge.com/2012/10/23/3540572/apple-new-ipad-mini-hands-on), [here](http://gizmodo.com/ipad-mini/), and [here](http://reviews.cnet.com/ipad-mini/) for example.
 
