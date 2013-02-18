@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: family | This Is My Blog]]></title>
+  <link href="http://kykim.com//blog/categories/family/atom.xml" rel="self"/>
+  <link href="http://kykim.com//"/>
+  <updated>2013-02-18T11:50:28-05:00</updated>
+  <id>http://kykim.com//</id>
+  <author>
+    <name><![CDATA[Kevin Y. Kim]]></name>
+    <email><![CDATA[kykim@kykim.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Parental Appification]]></title>
+    <link href="http://kykim.com//blog/2012/10/04/parental-appification/"/>
+    <updated>2012-10-04T14:15:00-04:00</updated>
+    <id>http://kykim.com//blog/2012/10/04/parental-appification</id>
+    <content type="html"><![CDATA[<p>My seven year old niece is learning how to do addition. One of the
+drills they are doing is given a number, what other number do you need
+to add up to 10. For example, if the teacher says "one", she needs to
+reply "nine."</p>
+
+<!-- more -->
+
+
+<p>My niece is having a little trouble, so my sister says, "You give me a
+number and I'll say the answer."</p>
+
+<p>"One"
+"Nine"</p>
+
+<p>"Three"
+"Seven"</p>
+
+<p>"Five"
+"Five"</p>
+
+<p>"Nine"
+"One"</p>
+
+<p>"Mom, you sound like an app."</p>
+]]></content>
+  </entry>
+  
+</feed>

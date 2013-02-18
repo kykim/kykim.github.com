@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Core Storage | This Is My Blog]]></title>
+  <link href="http://kykim.com//blog/categories/core-storage/atom.xml" rel="self"/>
+  <link href="http://kykim.com//"/>
+  <updated>2013-02-18T11:50:28-05:00</updated>
+  <id>http://kykim.com//</id>
+  <author>
+    <name><![CDATA[Kevin Y. Kim]]></name>
+    <email><![CDATA[kykim@kykim.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[iPad mini and Fusion Drive]]></title>
+    <link href="http://kykim.com//blog/2012/10/24/ipad-mini-and-fusion-drive/"/>
+    <updated>2012-10-24T12:38:00-04:00</updated>
+    <id>http://kykim.com//blog/2012/10/24/ipad-mini-and-fusion-drive</id>
+    <content type="html"><![CDATA[<p><small>
+<em>Update: <a href="http://www.macobserver.com/tmo/article/digging-into-fusion-drive-details">MacObserver</a> has a nice simple explanation of how Fusion Drive works. All the magic is in OSX and Core Storage</em>
+</small></p>
+
+<p>Apple announced what was probably the worst kept secret yesterday: the iPad mini. Pretty much what everyone expected and people with more access than me covered it <a href="http://www.theverge.com/2012/10/23/3540572/apple-new-ipad-mini-hands-on">here</a>, <a href="http://gizmodo.com/ipad-mini/">here</a>, and <a href="http://reviews.cnet.com/ipad-mini/">here</a> for example.</p>
+
+<p>Of all the things announced, the one I found the most interesting was the <a href="http://www.apple.com/imac/performance/#fusion">Fusion Drive</a>.</p>
+
+<!-- more -->
+
+
+<p>On the hardware side, it's a combination SSD and HD. That's nothing really new, as hybrid SSD/HD's have been around for a little while. Interestingly, most hybrid drives have a small SSD (~8GB) to use purely as a cache, Apple's Fusion Drive apparently uses a 128GB SSD. <a href="http://arstechnica.com/">ArsTechnica</a> has a nice analysis, where they speculate that it's an implementation of <a href="http://arstechnica.com/information-technology/2012/10/apple-fusion-drive-wait-what-how-does-this-work/">automatic tiering</a>. When Phil Schiller first mentioned it in the presentation, I was thinking of <a href="http://en.wikipedia.org/wiki/Hierarchical_storage_management">Hierarchical Storage Management</a>. Which I remember from my days of playing on Vaxen.</p>
+
+<p>Clearly, there's a software component to Fusion Drive that's implemented in <a href="http://www.apple.com/osx/">Mountain Lion</a>, and ArsTechnica references something called "Core Storage". The only other reference I could find to "Core Storage" was <a href="http://blog.fosketts.net/2011/08/04/mac-osx-lion-corestorage-volume-manager/">here</a> and a one-liner in the OSX Lion release note under <a href="http://developer.apple.com/library/mac/#releasenotes/MacOSX/WhatsNewInOSX/Articles/MacOSX10_7.html">File Vault</a>.</p>
+
+<p>This seems like a fascinating solution, and I'm going to do more research to understand how it all works.</p>
+]]></content>
+  </entry>
+  
+</feed>

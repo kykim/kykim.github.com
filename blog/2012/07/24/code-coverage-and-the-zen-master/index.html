@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Testivus on Code Coverage - This Is My Blog</title>
+  <meta name="author" content="Kevin Y. Kim">
+
+  
+  <meta name="description" content="From Testivus on Test Coverage Early one morning, a programmer asked the great master:
+“I am ready to write some unit tests. What code coverage &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://kykim.com//blog/2012/07/24/code-coverage-and-the-zen-master/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="This Is My Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35462894-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">This Is My Blog</a></h1>
+  
+    <h2>There are many like it, but this one is mine.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:kykim.com/" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/about">About</a></li>
+  <li><a href="http://www.amazon.com/-/e/B0099SW5U2">Books</a></li>
+  <li><a href="/press">Press</a></li>
+  <li><a href="/blog/archives">Blog Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Testivus on Code Coverage</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-24T20:11:00-04:00" pubdate data-updated="true">24-July-2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>From <a href="http://www.artima.com/forums/flat.jsp?forum=106&amp;thread=204677">Testivus on Test Coverage</a></p>
+
+<p>Early one morning, a programmer asked the great master:<br/>
+<em>“I am ready to write some unit tests. What code coverage should I aim for?”</em></p>
+
+<p>The great master replied:<br/>
+<em>“Don’t worry about coverage, just write some good tests.”</em></p>
+
+<p>The programmer smiled, bowed, and left.</p>
+
+<!-- more -->
+
+
+<p>&#8230;</p>
+
+<p>Later that day, a second programmer asked the same question.</p>
+
+<p>The great master pointed at a pot of boiling water and said:<br/>
+<em>“How many grains of rice should put in that pot?”</em></p>
+
+<p>The programmer, looking puzzled, replied:<br/>
+<em>“How can I possibly tell you? It depends on how many people you need to feed, how hungry they are, what other food you are serving, how much rice you have available, and so on.”</em></p>
+
+<p><em>“Exactly,”</em> said the great master.</p>
+
+<p>The second programmer smiled, bowed, and left.</p>
+
+<p>&#8230;</p>
+
+<p>Toward the end of the day, a third programmer came and asked the same question about code coverage.</p>
+
+<p><strong>“Eighty percent and no less!”</strong><br/>
+Replied the master in a stern voice, pounding his fist on the table.</p>
+
+<p>The third programmer smiled, bowed, and left.</p>
+
+<p>&#8230;</p>
+
+<p>After this last reply, a young apprentice approached the great master:<br/>
+<em>“Great master, today I overheard you answer the same question about code coverage with three different answers. Why?”</em></p>
+
+<p>The great master stood up from his chair:<br/>
+<em>“Come get some fresh tea with me and let’s talk about it.”</em></p>
+
+<p>After they filled their cups with smoking hot green tea, the great master began to answer:<br/>
+<em>“The first programmer is new and just getting started with testing. Right now he has a lot of code and no tests. He has a long way to go; focusing on code coverage at this time would be depressing and quite useless. He’s better off just getting used to writing and running some tests. He can worry about coverage later.”</em></p>
+
+<p><em>“The second programmer, on the other hand, is quite experience both at programming and testing. When I replied by asking her how many grains of rice I should put in a pot, I helped her realize that the amount of testing necessary depends on a number of factors, and she knows those factors better than I do – it’s her code after all. There is no single, simple, answer, and she’s smart enough to handle the truth and work with that.”</em></p>
+
+<p><em>“I see,”</em> said the young apprentice, <em>“but if there is no single simple answer, then why did you answer the third programmer ‘Eighty percent and no less’?”</em></p>
+
+<p>The great master laughed so hard and loud that his belly, evidence that he drank more than just green tea, flopped up and down.
+<em>“The third programmer wants only simple answers – even when there are no simple answers … and then does not follow them anyway.”</em></p>
+
+<p>The young apprentice and the grizzled great master finished drinking their tea in contemplative silence.</p>
+
+<p>For more, read <a href="http://www.artima.com/weblogs/viewpost.jsp?thread=203994">The Way of Testivus</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Kevin Y. Kim</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-24T20:11:00-04:00" pubdate data-updated="true">24-July-2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/code-coverage/'>Code Coverage</a>, <a class='category' href='/blog/categories/testivus/'>Testivus</a>, <a class='category' href='/blog/categories/zen/'>Zen</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://kykim.com//blog/2012/07/24/code-coverage-and-the-zen-master/" data-via="kykim" data-counturl="http://kykim.com//blog/2012/07/24/code-coverage-and-the-zen-master/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/07/23/parable-of-the-day/" title="Previous Post: Parable of the Day">&laquo; Parable of the Day</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/08/09/greatness/" title="Next Post: Greatness">Greatness &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Upcoming</h1>
+  <ul id="upcoming">
+      <li class="event">
+        <em>February 23, 2013</em>: <a href="http://www.facebook.com/events/205972099544891/permalink/206969599445141/">Wharton Tiers Ensemble @ Silent Barn, Bushwick, Brooklyn, NY</a>
+      </li>
+      <li class="event">
+        <em>March 8-12, 2013</em>: <a href="http://sxsw.com">SXSW, Austin, TX</a>
+      </li>
+      <li class="event">
+        <em>March 21-23, 2013</em>: <a href="http://cocoaconf.com/dc-2013/home">CocoaConf, Washington, DC</a>
+      </li>
+      <li class="event">
+        <em>April 4-6, 2013</em>: <a href="http://cocoaconf.com/dallas-2013/home">CocoaConf, Dallas, TX</a>
+      </li> 
+ </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("kykim", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/kykim" class="twitter-follow-button" data-show-count="false">Follow @kykim</a>
+  
+</section>
+
+<section>
+  <h1>Current Reading</h1>
+<a href="http://www.amazon.com/gp/product/1591844835/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=1789&creative=9325&creativeASIN=1591844835&linkCode=as2&tag=kykimcom-20"><img border="0" src="http://ws.assoc-amazon.com/widgets/q?_encoding=UTF8&ASIN=1591844835&Format=_SL160_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1&tag=kykimcom-20" ></a><img src="http://www.assoc-amazon.com/e/ir?t=kykimcom-20&l=as2&o=1&a=1591844835" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/happy-belated-new-year/">Happy Belated New Year</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/24/ipad-mini-and-fusion-drive/">iPad mini and Fusion Drive</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/18/accessing-reminders-with-eventkit-part-3/">Accessing Reminders with EventKit (Part 3)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Accessing Reminders with EventKit (Part 2)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Accessing Reminders with EventKit (part 1)</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/kykim">@kykim</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'kykim',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/kykimnyc?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Kevin Y. Kim -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'kykim';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://kykim.com//blog/2012/07/24/code-coverage-and-the-zen-master/';
+        var disqus_url = 'http://kykim.com//blog/2012/07/24/code-coverage-and-the-zen-master/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

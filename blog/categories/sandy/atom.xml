@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: sandy | This Is My Blog]]></title>
+  <link href="http://kykim.com//blog/categories/sandy/atom.xml" rel="self"/>
+  <link href="http://kykim.com//"/>
+  <updated>2013-02-18T11:50:28-05:00</updated>
+  <id>http://kykim.com//</id>
+  <author>
+    <name><![CDATA[Kevin Y. Kim]]></name>
+    <email><![CDATA[kykim@kykim.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Happy Belated New Year]]></title>
+    <link href="http://kykim.com//blog/2013/02/18/happy-belated-new-year/"/>
+    <updated>2013-02-18T11:17:00-05:00</updated>
+    <id>http://kykim.com//blog/2013/02/18/happy-belated-new-year</id>
+    <content type="html"><![CDATA[<p>It's been a while since my last post. Without going into too much detail (which I may do later),
+here's the quick recap:</p>
+
+<!-- more -->
+
+
+<ul>
+<li>Stranded in Portland, OR, for a week due to <a href="http://en.wikipedia.org/wiki/Hurricane_Sandy">Sandy</a></li>
+<li>Post-Sandy, no heat, hot water, or power for 22 days (mostly due to my <del>landlord</del> slumlord).</li>
+<li>Cat diagnosed with <a href="http://en.wikipedia.org/wiki/Lymphoma_in_animals#Lymphoma_in_cats">Feline Lymphoma</a>. Dies day after Christmas.</li>
+<li><a href="http://www.apress.com/9781430238072">Book</a> get published.</li>
+<li>General <a href="http://www.apporchard.com/">startup</a> craziness.</li>
+</ul>
+
+
+<p>I hope to be more regular with the posts ongoing.</p>
+]]></content>
+  </entry>
+  
+</feed>

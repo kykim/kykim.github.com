@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>This Is My Blog</title>
+  <meta name="author" content="Kevin Y. Kim">
+
+  
+  <meta name="description" content="Part 1 I want a command-line tool to access Reminders.app data. I was inspired by the command-line password manager, pass. Based on the man page, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://kykim.com//blog/page/2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="This Is My Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35462894-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">This Is My Blog</a></h1>
+  
+    <h2>There are many like it, but this one is mine.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:kykim.com/" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/about">About</a></li>
+  <li><a href="http://www.amazon.com/-/e/B0099SW5U2">Books</a></li>
+  <li><a href="/press">Press</a></li>
+  <li><a href="/blog/archives">Blog Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Accessing Reminders With EventKit (Part 2)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T12:05:00-04:00" pubdate data-updated="true">15-October-2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em><a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a></em></p>
+
+<p>I want a command-line tool to access Reminders.app data. I was inspired by the command-line password manager, <a href="http://zx2c4.com/projects/password-store">pass</a>. Based on the man page, <code>pass</code> uses the following parameters:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>pass <span class="o">[</span>COMMAND<span class="o">]</span> <span class="o">[</span>OPTIONS<span class="o">]</span>... <span class="o">[</span>ARGS<span class="o">]</span>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This seems like a good model to follow. I&#8217;m going to name this command <code>rem</code>, short for <em>reminders</em>. It also reminds me of my old <a href="http://en.wikipedia.org/wiki/BASIC">BASIC</a> days, where <code>REM</code> started a comment line.</p>
+
+<p>Here&#8217;s the functionality I want for the first iteration:</p>
+
+<ul>
+<li> <code>rem [ls] [calendar]</code> list reminders</li>
+<li> <code>rem rm &lt;calendar&gt; &lt;reminder_id&gt;</code> remove a reminder</li>
+<li> <code>rem cat &lt;calendar&gt; &lt;reminder_id&gt;</code> show a reminder details</li>
+<li> <code>rem done &lt;calendar&gt; &lt;reminder_id&gt;</code> mark a reminder as completed</li>
+</ul>
+
+
+<p>I&#8217;m not including functionality to add or modify a reminder (yet). I just don&#8217;t need this functionality right now, as I usually add reminders via my iPhone.</p>
+
+<p>Start with the OSX Command Line Tool Application template, with default options of using Foundation and ARC. Add <code>EventKit.framework</code> to the <code>rem</code> target and away we go.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Accessing Reminders With EventKit (Part 1)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-09T15:56:00-04:00" pubdate data-updated="true">09-October-2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m old school when it comes to certain things. When the <a href="http://en.wikipedia.org/wiki/PowerBook_G4#Titanium_PowerBook_G4">Titanium Powerbook G4</a> came out, I was excited because I could have six Terminal windows open at once. I still use <a href="http://www.gnu.org/software/emacs/">Emacs</a>. My biggest complaint about Xcode 4 is they got rid of the Emacs client integration.</p>
+
+<p>On the other hand, sometimes newer things work for me as well. When Reminders came out in iOS 5, I started using it, but wasn&#8217;t diligent about it. Once it got <a href="http://www.apple.com/osx/whats-new/features.html#reminders">iCloud and Mountain Lion integration</a>, I started using it a lot more. I even use <a href="http://www.apple.com/ios/whats-new/#siri">Siri</a> to make a reminder. I make a reminder on my iPhone, and I have it on all my devices, so I actually keep track of things.</p>
+
+<p>Recently, I started using the command line password manager, <a href="http://zx2c4.com/projects/password-store">pass</a>, to manage my passwords. I tried other password managers, and this is a case where the simpler command-line interface works for me. You type <code>pass</code> and get a list of all your accounts and passwords, which you catagorize. There are simple commands to add, extract and delete passwords. It&#8217;s all encrypted using <a href="http://www.gnupg.org">GPG</a>, so I don&#8217;t need to worry if I lose my laptop. All the data is stored in my home directory, so it&#8217;s part of my <a href="http://www.apple.com/osx/whats-new/features.html#timemachine">Time Machine</a> backups.</p>
+
+<figure class='code'><figcaption><span>pass  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>zx2c4@laptop ~ <span class="nv">$ </span>pass
+</span><span class='line'>Password Store
+</span><span class='line'>├── Business
+</span><span class='line'>│   ├── some-silly-business-site.com
+</span><span class='line'>│   └── another-business-site.net
+</span><span class='line'>├── Email
+</span><span class='line'>│   ├── donenfeld.com
+</span><span class='line'>│   └── zx2c4.com
+</span><span class='line'>└── France
+</span><span class='line'>    ├── bank
+</span><span class='line'>    ├── freebox
+</span><span class='line'>    └── Mobilephone
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I wanted some similar for to access reminders. Now Apple&#8217;s been pretty good about making command-line equivalents for a lot of UI tools (think DiskUtility.app and diskutil), but this is one where they don&#8217;t have anything. A quick Google didn&#8217;t really find anything for me either.</p>
+
+<p>So I have roll up my sleeves and write something myself.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/04/parental-appification/">Parental Appification</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-04T14:15:00-04:00" pubdate data-updated="true">04-October-2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My seven year old niece is learning how to do addition. One of the
+drills they are doing is given a number, what other number do you need
+to add up to 10. For example, if the teacher says &#8220;one&#8221;, she needs to
+reply &#8220;nine.&#8221;</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/10/04/parental-appification/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Upcoming</h1>
+  <ul id="upcoming">
+      <li class="event">
+        <em>February 23, 2013</em>: <a href="http://www.facebook.com/events/205972099544891/permalink/206969599445141/">Wharton Tiers Ensemble @ Silent Barn, Bushwick, Brooklyn, NY</a>
+      </li>
+      <li class="event">
+        <em>March 8-12, 2013</em>: <a href="http://sxsw.com">SXSW, Austin, TX</a>
+      </li>
+      <li class="event">
+        <em>March 21-23, 2013</em>: <a href="http://cocoaconf.com/dc-2013/home">CocoaConf, Washington, DC</a>
+      </li>
+      <li class="event">
+        <em>April 4-6, 2013</em>: <a href="http://cocoaconf.com/dallas-2013/home">CocoaConf, Dallas, TX</a>
+      </li> 
+ </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("kykim", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/kykim" class="twitter-follow-button" data-show-count="false">Follow @kykim</a>
+  
+</section>
+
+<section>
+  <h1>Current Reading</h1>
+<a href="http://www.amazon.com/gp/product/1591844835/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=1789&creative=9325&creativeASIN=1591844835&linkCode=as2&tag=kykimcom-20"><img border="0" src="http://ws.assoc-amazon.com/widgets/q?_encoding=UTF8&ASIN=1591844835&Format=_SL160_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1&tag=kykimcom-20" ></a><img src="http://www.assoc-amazon.com/e/ir?t=kykimcom-20&l=as2&o=1&a=1591844835" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/happy-belated-new-year/">Happy Belated New Year</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/24/ipad-mini-and-fusion-drive/">iPad mini and Fusion Drive</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/18/accessing-reminders-with-eventkit-part-3/">Accessing Reminders with EventKit (Part 3)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Accessing Reminders with EventKit (Part 2)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Accessing Reminders with EventKit (part 1)</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/kykim">@kykim</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'kykim',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/kykimnyc?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Kevin Y. Kim -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'kykim';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

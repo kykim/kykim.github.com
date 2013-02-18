@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Xcode | This Is My Blog]]></title>
+  <link href="http://kykim.com//blog/categories/xcode/atom.xml" rel="self"/>
+  <link href="http://kykim.com//"/>
+  <updated>2013-02-18T11:50:28-05:00</updated>
+  <id>http://kykim.com//</id>
+  <author>
+    <name><![CDATA[Kevin Y. Kim]]></name>
+    <email><![CDATA[kykim@kykim.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Texts From Xcode]]></title>
+    <link href="http://kykim.com//blog/2012/06/07/texts-from-xcode/"/>
+    <updated>2012-06-07T14:38:00-04:00</updated>
+    <id>http://kykim.com//blog/2012/06/07/texts-from-xcode</id>
+    <content type="html"><![CDATA[<p>Hilarious! And so true.
+<a href="http://textfromxcode.tumblr.com/">Texts From Xcode</a></p>
+]]></content>
+  </entry>
+  
+</feed>

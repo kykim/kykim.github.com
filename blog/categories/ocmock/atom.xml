@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: OCMock | This Is My Blog]]></title>
+  <link href="http://kykim.com//blog/categories/ocmock/atom.xml" rel="self"/>
+  <link href="http://kykim.com//"/>
+  <updated>2013-02-18T11:50:28-05:00</updated>
+  <id>http://kykim.com//</id>
+  <author>
+    <name><![CDATA[Kevin Y. Kim]]></name>
+    <email><![CDATA[kykim@kykim.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Class Methods in OCMock]]></title>
+    <link href="http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock/"/>
+    <updated>2012-06-06T16:09:00-04:00</updated>
+    <id>http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock</id>
+    <content type="html"><![CDATA[<p>I'm opening my blog with a post about patches I've made to <a href="http://ocmock.org">OCMock</a> to handle mocking and stubbing class methods. You can find my fork <a href="https://github.com/kykim/ocmock">HERE</a>.</p>
+
+<p>I built on top of the work in progress in the OCMock master. It works, but will probably need some refinement.</p>
+
+<p>Let's the example of a static constructor in <code>NSString</code>:</p>
+
+<pre><code>NSString *s = [NSString string];    // returns empty string
+</code></pre>
+
+<p>In order to mock this, we do this:</p>
+
+<pre><code>id mockStringClass = [OCMockObject mockForClassObject:[NSString class]];
+NSString *mockString = @"Mocked String Result";
+[[[mockStringClass stub] andReturn:mockString] string];
+NSString *actualString = [NSString string];
+STAssertTrue(0 != [actualString length], @"Expected String Not Be Empty");
+</code></pre>
+
+<p>I sent the pull request about two weeks ago, still waiting to hear back. Read on if you're interested in the details...</p>
+
+<!-- more -->
+
+
+<p><a href="http://ocmock.org">OCMock</a> is one of the more popular Objective-C/iOS <a href="http://www.mockobjects.com/">mocking</a> frameworks out there. It actually predates iOS.</p>
+
+<p>One of the biggest problems I've always had with OCMock was its inability to handle class methods. There are many times when I've had to call a class method, that for various reasons I needed to mock.</p>
+
+<p><code>objc Class Methods in iOS MediaPlayer framework
+MPMediaQuery *songsQuery = [MPMediaQuery songsQuery];
+NSArray *songs = [songsQuery items];
+</code></p>
+
+<p>If you're running this on the simulator, you don't have a media library (aka iTunes library). So how do you test your code? Besides, testing against "live" data is probably a bad idea.</p>
+
+<p>Looking at the OCMock <a href="http://github.com/erikdoe/ocmock">Github</a> repository, there was some preliminary work done on supporting class methods. The class is named OCMockClassObject (<a href="https://github.com/erikdoe/ocmock/blob/master/Source/OCMock/OCMockClassObject.h">header</a>, <a href="https://github.com/erikdoe/ocmock/blob/master/Source/OCMock/OCMockClassObject.m">source</a>). So why doesn't this work?</p>
+
+<p>Looking into the unit tests for OCMock, I found the tests for OCMockClassObject. Interestingly, one of the tests,</p>
+
+<pre><code>// - (void)testForwardsUnstubbedMethodsToRealClassObjectAfterStopIsCalled
+</code></pre>
+
+<p>is commented out. Why? First, let's understand how OCMock works.</p>
+
+<p>When you mock a class, you declare something like this:</p>
+
+<p><code>objc Mocking an instance method with OCMock
+id mockObject = [OCMockObject mockForClass:[NSString class]];
+[[mockObject expect] andReturn:@"mockedstring"] lowercaseString];
+... // code to test
+[mockObject verify];
+</code></p>
+
+<p><code>mockObject</code> is declared as mock for <code>NSString</code>. Also, we state that we <em>expect</em> the method <code>lowercaseString</code> to be invoked on <code>mockObject</code>. Furthermore, <code>lowercaseString</code> should return "mockedstring". We defined some test code where <code>mockObject</code> is used. Typically, it is passed into the method we are testing. Finally, we invoke <code>[mockObject verify]</code> to confirm that <code>lowercaseString</code> was called. If not, the test fails.</p>
+
+<p>Without delving too deeply into the specifics of the OCMock, how are these method calls intercepted? Via <a href="https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSProxy_Class/Reference/Reference.html">NSProxy</a>.</p>
+
+<p>In short, <code>NSProxy</code> is an abstract class, and requires its subclasses to implement</p>
+
+<pre><code>- (void)forwardInvocation:(NSInvocation *)anInvocation`
+</code></pre>
+
+<p>An <code>OCMock</code> class (<code>OCMockRecorder</code> specifically) implements <code>forwardInvocation</code> to handle the method call as specified. In the example above, the call is forwarded to a return the value specified in the <code>andReturn:</code> call.</p>
+
+<p>For other mocking options in <code>OCMock</code></p>
+
+<pre><code>+ (id)mockForProtocol:(Protocol *)aProtocol;
++ (id)partialMockForObject:(NSObject *)anObject;
++ (id)niceMockForClass:(Class)aClass;
++ (id)niceMockForProtocol:(Protocol *)aProtocol;
++ (id)observerMock;
+</code></pre>
+
+<p>the forwardInvocation relies on <a href="http://cocoadev.com/wiki/MethodSwizzling">method swizzling</a> to redirect methods to expectations and/or stubs.</p>
+
+<p>So why doesn't this work for class methods? Well, it turns out it does. The real problems is resetting back to the original state.</p>
+
+<p>One of the important features of unit testing is to make sure each test is atomic. That is, the results on one test should not impact the results of another. To that end, we use <code>setUp</code> and <code>tearDown</code> methods to initialize and clean up our environment before and after running each test. Furthermore, we may do additional configuration inside each test, and it's incumbent upon us as developers to make sure we clean up after ourselves.</p>
+
+<p>Looking back at the <code>OCMock</code> source, we can see that the mocking of class methods works fine. It's just that our swizzled class method stays swizzled. Why does it work for instance methods? Because the instance is destroyed with each test (hopefully), so any evidence of method swizzling just disappears with the instance. Class method swizzling will persist for the run life of the application (or in this case, the test harness). So we need a away to undo our swizzling.</p>
+
+<p>My solution was simple: create an <code>NSMutableDictionary</code> to store the <a href="https://developer.apple.com/library/ios/#documentation/Cocoa/Reference/ObjCRuntimeRef/Reference/reference.html#jumpTo_96">IMP pointer</a> to the original class method, keyed on the string representation of the class method selector. When the mocked class object is deallocated, simply iterate over the dictionary, replacing all the swizzled class methods for their originals.</p>
+
+<p>I'm making the assumption that the location of the method (and class definintion) pointed to by the <code>IMP</code> pointer won't change during the run life of the application/test harness. I figured this was unlikely, but I needed to make sure.</p>
+
+<p>Who better to ask than Mr. Objective-C: <a href="http://www.linkedin.com/pub/steve-naroff/4/671/194">Steve Naroff</a>? His response:</p>
+
+<pre><code>In theory, no. In practice, yes.
+
+If the code were dynamically loaded/unloaded, the address could
+change. If the code were compiled on the fly, you could imagine
+the runtime purging infrequently used code and re-instantiating it
+later if necessary (to keep the working set of methods down on a
+smaller footprint device). Unless things have changed a great deal
+in the past 2 years, I'd be surprised if my scenarios happen often
+(or at all).
+</code></pre>
+
+<p>Well, I'm pretty sure that won't happen while running tests, so this should be safe.</p>
+
+<p>This can be pretty esoteric stuff, that most iOS won't ever have to deal with, but to make testing frameworks, know the Objective-C runtime is pretty essential. I recommend the following for more information:</p>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ObjectiveC/Introduction/introObjectiveC.html">The Objective-C Programming Language</a></li>
+<li><a href="https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html">Objective-C Runtime Programming Guide</a></li>
+<li><a href="https://developer.apple.com/library/ios/#documentation/Cocoa/Reference/ObjCRuntimeRef/Reference/reference.html">Objective-C Runtime Reference</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

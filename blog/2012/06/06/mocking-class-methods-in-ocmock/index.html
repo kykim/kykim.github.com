@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Class Methods in OCMock - This Is My Blog</title>
+  <meta name="author" content="Kevin Y. Kim">
+
+  
+  <meta name="description" content="I&#8217;m opening my blog with a post about patches I&#8217;ve made to OCMock to handle mocking and stubbing class methods. You can find my fork HERE &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="This Is My Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35462894-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">This Is My Blog</a></h1>
+  
+    <h2>There are many like it, but this one is mine.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:kykim.com/" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/about">About</a></li>
+  <li><a href="http://www.amazon.com/-/e/B0099SW5U2">Books</a></li>
+  <li><a href="/press">Press</a></li>
+  <li><a href="/blog/archives">Blog Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Class Methods in OCMock</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-06T16:09:00-04:00" pubdate data-updated="true">06-June-2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&#8217;m opening my blog with a post about patches I&#8217;ve made to <a href="http://ocmock.org">OCMock</a> to handle mocking and stubbing class methods. You can find my fork <a href="https://github.com/kykim/ocmock">HERE</a>.</p>
+
+<p>I built on top of the work in progress in the OCMock master. It works, but will probably need some refinement.</p>
+
+<p>Let&#8217;s the example of a static constructor in <code>NSString</code>:</p>
+
+<pre><code>NSString *s = [NSString string];    // returns empty string
+</code></pre>
+
+<p>In order to mock this, we do this:</p>
+
+<pre><code>id mockStringClass = [OCMockObject mockForClassObject:[NSString class]];
+NSString *mockString = @"Mocked String Result";
+[[[mockStringClass stub] andReturn:mockString] string];
+NSString *actualString = [NSString string];
+STAssertTrue(0 != [actualString length], @"Expected String Not Be Empty");
+</code></pre>
+
+<p>I sent the pull request about two weeks ago, still waiting to hear back. Read on if you&#8217;re interested in the details&#8230;</p>
+
+<!-- more -->
+
+
+<p><a href="http://ocmock.org">OCMock</a> is one of the more popular Objective-C/iOS <a href="http://www.mockobjects.com/">mocking</a> frameworks out there. It actually predates iOS.</p>
+
+<p>One of the biggest problems I&#8217;ve always had with OCMock was its inability to handle class methods. There are many times when I&#8217;ve had to call a class method, that for various reasons I needed to mock.</p>
+
+<figure class='code'><figcaption><span>Class Methods in iOS MediaPlayer framework</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MPMediaQuery</span> <span class="o">*</span><span class="n">songsQuery</span> <span class="o">=</span> <span class="p">[</span><span class="n">MPMediaQuery</span> <span class="n">songsQuery</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSArray</span> <span class="o">*</span><span class="n">songs</span> <span class="o">=</span> <span class="p">[</span><span class="n">songsQuery</span> <span class="n">items</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&#8217;re running this on the simulator, you don&#8217;t have a media library (aka iTunes library). So how do you test your code? Besides, testing against &#8220;live&#8221; data is probably a bad idea.</p>
+
+<p>Looking at the OCMock <a href="http://github.com/erikdoe/ocmock">Github</a> repository, there was some preliminary work done on supporting class methods. The class is named OCMockClassObject (<a href="https://github.com/erikdoe/ocmock/blob/master/Source/OCMock/OCMockClassObject.h">header</a>, <a href="https://github.com/erikdoe/ocmock/blob/master/Source/OCMock/OCMockClassObject.m">source</a>). So why doesn&#8217;t this work?</p>
+
+<p>Looking into the unit tests for OCMock, I found the tests for OCMockClassObject. Interestingly, one of the tests,</p>
+
+<pre><code>// - (void)testForwardsUnstubbedMethodsToRealClassObjectAfterStopIsCalled
+</code></pre>
+
+<p>is commented out. Why? First, let&#8217;s understand how OCMock works.</p>
+
+<p>When you mock a class, you declare something like this:</p>
+
+<figure class='code'><figcaption><span>Mocking an instance method with OCMock</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="kt">id</span> <span class="n">mockObject</span> <span class="o">=</span> <span class="p">[</span><span class="n">OCMockObject</span> <span class="nl">mockForClass:</span><span class="p">[</span><span class="n">NSString</span> <span class="n">class</span><span class="p">]];</span>
+</span><span class='line'><span class="p">[[</span><span class="n">mockObject</span> <span class="n">expect</span><span class="p">]</span> <span class="nl">andReturn:</span><span class="s">@&quot;mockedstring&quot;</span><span class="p">]</span> <span class="n">lowercaseString</span><span class="p">];</span>
+</span><span class='line'><span class="p">...</span> <span class="c1">// code to test</span>
+</span><span class='line'><span class="p">[</span><span class="n">mockObject</span> <span class="n">verify</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>mockObject</code> is declared as mock for <code>NSString</code>. Also, we state that we <em>expect</em> the method <code>lowercaseString</code> to be invoked on <code>mockObject</code>. Furthermore, <code>lowercaseString</code> should return &#8220;mockedstring&#8221;. We defined some test code where <code>mockObject</code> is used. Typically, it is passed into the method we are testing. Finally, we invoke <code>[mockObject verify]</code> to confirm that <code>lowercaseString</code> was called. If not, the test fails.</p>
+
+<p>Without delving too deeply into the specifics of the OCMock, how are these method calls intercepted? Via <a href="https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSProxy_Class/Reference/Reference.html">NSProxy</a>.</p>
+
+<p>In short, <code>NSProxy</code> is an abstract class, and requires its subclasses to implement</p>
+
+<pre><code>- (void)forwardInvocation:(NSInvocation *)anInvocation`
+</code></pre>
+
+<p>An <code>OCMock</code> class (<code>OCMockRecorder</code> specifically) implements <code>forwardInvocation</code> to handle the method call as specified. In the example above, the call is forwarded to a return the value specified in the <code>andReturn:</code> call.</p>
+
+<p>For other mocking options in <code>OCMock</code></p>
+
+<pre><code>+ (id)mockForProtocol:(Protocol *)aProtocol;
++ (id)partialMockForObject:(NSObject *)anObject;
++ (id)niceMockForClass:(Class)aClass;
++ (id)niceMockForProtocol:(Protocol *)aProtocol;
++ (id)observerMock;
+</code></pre>
+
+<p>the forwardInvocation relies on <a href="http://cocoadev.com/wiki/MethodSwizzling">method swizzling</a> to redirect methods to expectations and/or stubs.</p>
+
+<p>So why doesn&#8217;t this work for class methods? Well, it turns out it does. The real problems is resetting back to the original state.</p>
+
+<p>One of the important features of unit testing is to make sure each test is atomic. That is, the results on one test should not impact the results of another. To that end, we use <code>setUp</code> and <code>tearDown</code> methods to initialize and clean up our environment before and after running each test. Furthermore, we may do additional configuration inside each test, and it&#8217;s incumbent upon us as developers to make sure we clean up after ourselves.</p>
+
+<p>Looking back at the <code>OCMock</code> source, we can see that the mocking of class methods works fine. It&#8217;s just that our swizzled class method stays swizzled. Why does it work for instance methods? Because the instance is destroyed with each test (hopefully), so any evidence of method swizzling just disappears with the instance. Class method swizzling will persist for the run life of the application (or in this case, the test harness). So we need a away to undo our swizzling.</p>
+
+<p>My solution was simple: create an <code>NSMutableDictionary</code> to store the <a href="https://developer.apple.com/library/ios/#documentation/Cocoa/Reference/ObjCRuntimeRef/Reference/reference.html#jumpTo_96">IMP pointer</a> to the original class method, keyed on the string representation of the class method selector. When the mocked class object is deallocated, simply iterate over the dictionary, replacing all the swizzled class methods for their originals.</p>
+
+<p>I&#8217;m making the assumption that the location of the method (and class definintion) pointed to by the <code>IMP</code> pointer won&#8217;t change during the run life of the application/test harness. I figured this was unlikely, but I needed to make sure.</p>
+
+<p>Who better to ask than Mr. Objective-C: <a href="http://www.linkedin.com/pub/steve-naroff/4/671/194">Steve Naroff</a>? His response:</p>
+
+<pre><code>In theory, no. In practice, yes.
+
+If the code were dynamically loaded/unloaded, the address could
+change. If the code were compiled on the fly, you could imagine
+the runtime purging infrequently used code and re-instantiating it
+later if necessary (to keep the working set of methods down on a
+smaller footprint device). Unless things have changed a great deal
+in the past 2 years, I'd be surprised if my scenarios happen often
+(or at all).
+</code></pre>
+
+<p>Well, I&#8217;m pretty sure that won&#8217;t happen while running tests, so this should be safe.</p>
+
+<p>This can be pretty esoteric stuff, that most iOS won&#8217;t ever have to deal with, but to make testing frameworks, know the Objective-C runtime is pretty essential. I recommend the following for more information:</p>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ObjectiveC/Introduction/introObjectiveC.html">The Objective-C Programming Language</a></li>
+<li><a href="https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html">Objective-C Runtime Programming Guide</a></li>
+<li><a href="https://developer.apple.com/library/ios/#documentation/Cocoa/Reference/ObjCRuntimeRef/Reference/reference.html">Objective-C Runtime Reference</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Kevin Y. Kim</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-06T16:09:00-04:00" pubdate data-updated="true">06-June-2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mockobjects/'>MockObjects</a>, <a class='category' href='/blog/categories/ocmock/'>OCMock</a>, <a class='category' href='/blog/categories/objective-c/'>Objective-C</a>, <a class='category' href='/blog/categories/unittesting/'>UnitTesting</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock/" data-via="kykim" data-counturl="http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/06/07/texts-from-xcode/" title="Next Post: Texts From Xcode">Texts From Xcode &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Upcoming</h1>
+  <ul id="upcoming">
+      <li class="event">
+        <em>February 23, 2013</em>: <a href="http://www.facebook.com/events/205972099544891/permalink/206969599445141/">Wharton Tiers Ensemble @ Silent Barn, Bushwick, Brooklyn, NY</a>
+      </li>
+      <li class="event">
+        <em>March 8-12, 2013</em>: <a href="http://sxsw.com">SXSW, Austin, TX</a>
+      </li>
+      <li class="event">
+        <em>March 21-23, 2013</em>: <a href="http://cocoaconf.com/dc-2013/home">CocoaConf, Washington, DC</a>
+      </li>
+      <li class="event">
+        <em>April 4-6, 2013</em>: <a href="http://cocoaconf.com/dallas-2013/home">CocoaConf, Dallas, TX</a>
+      </li> 
+ </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("kykim", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/kykim" class="twitter-follow-button" data-show-count="false">Follow @kykim</a>
+  
+</section>
+
+<section>
+  <h1>Current Reading</h1>
+<a href="http://www.amazon.com/gp/product/1591844835/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=1789&creative=9325&creativeASIN=1591844835&linkCode=as2&tag=kykimcom-20"><img border="0" src="http://ws.assoc-amazon.com/widgets/q?_encoding=UTF8&ASIN=1591844835&Format=_SL160_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1&tag=kykimcom-20" ></a><img src="http://www.assoc-amazon.com/e/ir?t=kykimcom-20&l=as2&o=1&a=1591844835" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/happy-belated-new-year/">Happy Belated New Year</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/24/ipad-mini-and-fusion-drive/">iPad mini and Fusion Drive</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/18/accessing-reminders-with-eventkit-part-3/">Accessing Reminders with EventKit (Part 3)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Accessing Reminders with EventKit (Part 2)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Accessing Reminders with EventKit (part 1)</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/kykim">@kykim</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'kykim',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/kykimnyc?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Kevin Y. Kim -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'kykim';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock/';
+        var disqus_url = 'http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

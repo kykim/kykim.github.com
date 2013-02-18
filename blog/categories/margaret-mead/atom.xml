@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: margaret mead | This Is My Blog]]></title>
+  <link href="http://kykim.com//blog/categories/margaret-mead/atom.xml" rel="self"/>
+  <link href="http://kykim.com//"/>
+  <updated>2013-02-18T11:50:28-05:00</updated>
+  <id>http://kykim.com//</id>
+  <author>
+    <name><![CDATA[Kevin Y. Kim]]></name>
+    <email><![CDATA[kykim@kykim.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Quote of the Day]]></title>
+    <link href="http://kykim.com//blog/2012/07/13/quote-of-the-day/"/>
+    <updated>2012-07-13T18:05:00-04:00</updated>
+    <id>http://kykim.com//blog/2012/07/13/quote-of-the-day</id>
+    <content type="html"><![CDATA[<p><strong>What people say,</strong><br/>
+<strong>What people do,</strong><br/>
+<strong>And</strong><br/>
+<strong>What they say they do</strong><br/>
+<strong>Are entirely different things.</strong><br/>
+<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<em>Margaret Mead</em></sup></p>
+]]></content>
+  </entry>
+  
+</feed>

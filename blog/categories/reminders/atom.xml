@@ -1,0 +1,1110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Reminders | This Is My Blog]]></title>
+  <link href="http://kykim.com//blog/categories/reminders/atom.xml" rel="self"/>
+  <link href="http://kykim.com//"/>
+  <updated>2013-02-18T11:50:28-05:00</updated>
+  <id>http://kykim.com//</id>
+  <author>
+    <name><![CDATA[Kevin Y. Kim]]></name>
+    <email><![CDATA[kykim@kykim.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Accessing Reminders with EventKit (Part 3)]]></title>
+    <link href="http://kykim.com//blog/2012/10/18/accessing-reminders-with-eventkit-part-3/"/>
+    <updated>2012-10-18T11:37:00-04:00</updated>
+    <id>http://kykim.com//blog/2012/10/18/accessing-reminders-with-eventkit-part-3</id>
+    <content type="html"><![CDATA[<p><em><a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a>, <a href="/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Part 2</a></em></p>
+
+<p>I left off with the <code>rem</code> command-line app parsing the command-line arguments and stubbed out the functions to handle each command. I'm going to finish up the app by fleshing out each command function.</p>
+
+<p>Before working on the handler functions, I want to do one more thing. I want to check that my command-line arguments actually specify an actual reminder list (calendar) and reminder id (index).</p>
+
+<!-- more -->
+
+
+<p>The <code>EKCalendarItem</code> has two identifier properties: <code>calendarItemIdentifier</code> and <code>calendarItemExternalIdentifier</code>. At first thought, it would be a good idea to use one of those properties as the reminder id. However, both identifier properties return a <a href="http://en.wikipedia.org/wiki/Globally_unique_identifier">GUID</a>, which is great for programming purposes, but not so ideal for a command-line app. So, reminder id will be a simple integer to represent the reminder position in the reminder list.</p>
+
+<p>Basically, we want to check the reminder list  name specified and compare it to the known names in the <code>calendars</code> dictionary. If the name is valid, then we check to see if the specified reminder id is within the index range of the reminder array for a given reminder list.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">validateArguments</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">if</span> <span class="p">(</span><span class="n">command</span> <span class="o">==</span> <span class="n">CMD_LS</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">calendar</span> <span class="o">==</span> <span class="nb">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSUInteger</span> <span class="n">calendar_id</span> <span class="o">=</span> <span class="p">[[</span><span class="n">calendars</span> <span class="n">allKeys</span><span class="p">]</span> <span class="nl">indexOfObject:</span><span class="n">calendar</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">calendar_id</span> <span class="o">==</span> <span class="n">NSNotFound</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">_print</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">@&quot;rem: Error - Unknown Reminder List: </span><span class="se">\&quot;</span><span class="s">%@</span><span class="se">\&quot;\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">calendar</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">command</span> <span class="o">==</span> <span class="n">CMD_LS</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">reminder_id</span> <span class="o">==</span> <span class="nb">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSInteger</span> <span class="n">r_id</span> <span class="o">=</span> <span class="p">[</span><span class="n">reminder_id</span> <span class="n">integerValue</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSArray</span> <span class="o">*</span><span class="n">reminders</span> <span class="o">=</span> <span class="p">[</span><span class="n">calendars</span> <span class="nl">objectForKey:</span><span class="n">calendar</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">r_id</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">r_id</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="n">reminders</span><span class="p">.</span><span class="n">count</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">_print</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">@&quot;rem: Error - ID Out of Range for Reminder List: %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">calendar</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">reminder</span> <span class="o">=</span> <span class="p">[</span><span class="n">reminders</span> <span class="nl">objectAtIndex:</span><span class="n">r_id</span><span class="p">];</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The <code>ls</code> command allows the <code>calendar</code> and <code>reminder_id</code> variables to be <code>nil</code>. Other than that, we use the arguments to assign values to the variables <code>calendar</code> and <code>reminder</code>.</p>
+
+<h3>Displaying Reminders</h3>
+
+<p>Before implementing each function, I need some special characters for displaying the reminders. Let's take another look at the <a href="http://zx2c4.com/projects/password-store">pass</a> output:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>pass  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>zx2c4@laptop ~ <span class="nv">$ </span>pass
+</span><span class='line'>Password Store
+</span><span class='line'>├── Business
+</span><span class='line'>│   ├── some-silly-business-site.com
+</span><span class='line'>│   └── another-business-site.net
+</span><span class='line'>├── Email
+</span><span class='line'>│   ├── donenfeld.com
+</span><span class='line'>│   └── zx2c4.com
+</span><span class='line'>└── France&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;├── bank
+</span><span class='line'>├── freebox
+</span><span class='line'>└── Mobilephone
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>It turns out that <code>pass</code> uses the file system to store everything. To get the nicer output, it uses a program called <a href="http://mama.indstate.edu/users/ice/tree/">tree</a>, which prints out file-system hierarchies. We could hack something that writes out to the file-system, then use <code>tree</code> to display it, but that's overkill. Our reminders aren't stored in a tree; they're only two levels deep: the reminders and their list.</p>
+
+<p>Looking at the <code>pass</code> output, there are three "special" strings: "│   ", "├──", "└──". Looking at the <code>tree</code> source, I found the unicode encodings for them. But, I'm cheating and just cutting and pasting into the code.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">TACKER</span> <span class="s">@&quot;├──&quot;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">CORNER</span> <span class="s">@&quot;└──&quot;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">PIPER</span>  <span class="s">@&quot;│  &quot;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">SPACER</span> <span class="s">@&quot;   &quot;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Now, there are two things to consider:
+  1.  The last calender and reminder need to use the corner character.
+  2.  The reminders of the last calendar don't have the vertical bar.
+For expediency's sake, I'm using two functions for output. One for calendars and one for reminders.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">_printCalendarLine</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">line</span><span class="p">,</span> <span class="kt">BOOL</span> <span class="n">last</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSString</span> <span class="o">*</span><span class="n">prefix</span> <span class="o">=</span> <span class="p">(</span><span class="n">last</span><span class="p">)</span> <span class="o">?</span> <span class="n">CORNER</span> <span class="o">:</span> <span class="n">TACKER</span><span class="p">;</span>
+</span><span class='line'><span class="n">_print</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">@&quot;%@ %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">line</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="kt">void</span> <span class="n">_printReminderLine</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">line</span><span class="p">,</span> <span class="kt">BOOL</span> <span class="n">last</span><span class="p">,</span> <span class="kt">BOOL</span> <span class="n">lastCalendar</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSString</span> <span class="o">*</span><span class="n">indent</span> <span class="o">=</span> <span class="p">(</span><span class="n">lastCalendar</span><span class="p">)</span> <span class="o">?</span> <span class="n">SPACER</span> <span class="o">:</span> <span class="n">PIPER</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">prefix</span> <span class="o">=</span> <span class="p">(</span><span class="n">last</span><span class="p">)</span> <span class="o">?</span> <span class="n">CORNER</span> <span class="o">:</span> <span class="n">TACKER</span><span class="p">;</span>
+</span><span class='line'><span class="n">_print</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">@&quot;%@%@ %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">indent</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">line</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Listing Reminders</h3>
+
+<p>Now, the <code>listReminders</code> function is suppose to handle two cases: reminders in a specific reminder list or all reminders. The actually calls to <code>printCalendarLine</code> and <code>printReminderLine</code> will be handled by <code>listCalendar</code>.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">listCalendar</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">cal</span><span class="p">,</span> <span class="kt">BOOL</span> <span class="n">last</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">printCalendarLine</span><span class="p">(</span><span class="n">cal</span><span class="p">,</span> <span class="n">last</span><span class="p">);</span>
+</span><span class='line'><span class="n">NSArray</span> <span class="o">*</span><span class="n">reminders</span> <span class="o">=</span> <span class="p">[</span><span class="n">calendars</span> <span class="nl">valueForKey:</span><span class="n">cal</span><span class="p">];</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="n">EKReminder</span> <span class="o">*</span><span class="n">r</span> <span class="k">in</span> <span class="n">reminders</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">printReminderLine</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">title</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="p">[</span><span class="n">reminders</span> <span class="n">lastObject</span><span class="p">]),</span> <span class="n">last</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="kt">void</span> <span class="n">listReminders</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Reminders</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">calendar</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">listCalendar</span><span class="p">(</span><span class="n">calendar</span><span class="p">,</span> <span class="n">YES</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">cal</span> <span class="k">in</span> <span class="n">calendars</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">listCalendar</span><span class="p">(</span><span class="n">cal</span><span class="p">,</span> <span class="p">(</span><span class="n">cal</span> <span class="o">==</span> <span class="p">[[</span><span class="n">calendars</span> <span class="n">allKeys</span><span class="p">]</span> <span class="n">lastObject</span><span class="p">]));</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Trying it out, it gives us this output.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>kykim<span class="nv">$ </span>rem
+</span><span class='line'>Reminders
+</span><span class='line'>├── Work
+</span><span class='line'>│   ├── Blog about EventKit
+</span><span class='line'>│   └── Finish More iOS Programming Book
+</span><span class='line'>└── Home&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;├── Pay Electric
+</span><span class='line'>└── Feed Cat
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;kykim<span class="nv">$ </span>./rem ls Home
+</span><span class='line'>Reminders
+</span><span class='line'>└── Home&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;├── Pay Electric
+</span><span class='line'>└── Feed Cat
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Looks good, but one more tweak. All the other commands use a reminder_id to identify which reminder to use. Recall, that I'm just printing a simple integer index as the reminder_id. <code>printReminderLine</code> and <code>listCalendar</code> change to this.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">_printReminderLine</span><span class="p">(</span><span class="n">NSUInteger</span> <span class="kt">id</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">line</span><span class="p">,</span> <span class="kt">BOOL</span> <span class="n">last</span><span class="p">,</span> <span class="kt">BOOL</span> <span class="n">lastCalendar</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSString</span> <span class="o">*</span><span class="n">indent</span> <span class="o">=</span> <span class="p">(</span><span class="n">lastCalendar</span><span class="p">)</span> <span class="o">?</span> <span class="n">SPACER</span> <span class="o">:</span> <span class="n">PIPER</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">prefix</span> <span class="o">=</span> <span class="p">(</span><span class="n">last</span><span class="p">)</span> <span class="o">?</span> <span class="n">CORNER</span> <span class="o">:</span> <span class="n">TACKER</span><span class="p">;</span>
+</span><span class='line'><span class="n">_print</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">@&quot;%@%@ %ld. %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">indent</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="kt">id</span><span class="p">,</span> <span class="n">line</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="kt">void</span> <span class="n">_listCalendar</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">cal</span><span class="p">,</span> <span class="kt">BOOL</span> <span class="n">last</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">_printCalendarLine</span><span class="p">(</span><span class="n">cal</span><span class="p">,</span> <span class="n">last</span><span class="p">);</span>
+</span><span class='line'><span class="n">NSArray</span> <span class="o">*</span><span class="n">reminders</span> <span class="o">=</span> <span class="p">[</span><span class="n">calendars</span> <span class="nl">valueForKey:</span><span class="n">cal</span><span class="p">];</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="n">NSUInteger</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">reminders</span><span class="p">.</span><span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">EKReminder</span> <span class="o">*</span><span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="n">reminders</span> <span class="nl">objectAtIndex:</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">_printReminderLine</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">title</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="p">[</span><span class="n">reminders</span> <span class="n">lastObject</span><span class="p">]),</span> <span class="n">last</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Removing a Reminder</h3>
+
+<p>Removing a reminder is a simple call to <code>removeReminder:commit:error:</code> to the event store.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">removeReminder</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">;</span>
+</span><span class='line'><span class="kt">BOOL</span> <span class="n">success</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">removeReminder:</span><span class="n">reminder</span> <span class="nl">commit:</span><span class="n">YES</span> <span class="nl">error:</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">error</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">_print</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">@&quot;rem: Error removing Reminder (%@) from list %@</span><span class="se">\n\t</span><span class="s">%@&quot;</span><span class="p">,</span> <span class="n">reminder_id</span><span class="p">,</span> <span class="n">calendar</span><span class="p">,</span> <span class="p">[</span><span class="n">error</span> <span class="n">localizedDescription</span><span class="p">]);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Show a Reminder Details</h3>
+
+<p>Showing a reminder is a little verbose, but pretty straight-forward. The only catch is using an <code>NSDateFormatter</code> instance to display the date properties of a reminder. The reminder properties I chose to display are: title, calendar (reminder list) name, creation date, last modification date (if different than creation date), start date (if set), due date (if set), and notes (if set).</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">showReminder</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">_print</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">@&quot;Reminder: %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">reminder</span><span class="p">.</span><span class="n">title</span><span class="p">);</span>
+</span><span class='line'><span class="n">_print</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">@&quot;</span><span class="se">\t</span><span class="s">List: %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">calendar</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">_print</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">@&quot;</span><span class="se">\t</span><span class="s">Created On: %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">dateFormatter</span> <span class="nl">stringFromDate:</span><span class="n">reminder</span><span class="p">.</span><span class="n">creationDate</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">reminder</span><span class="p">.</span><span class="n">lastModifiedDate</span> <span class="o">!=</span> <span class="n">reminder</span><span class="p">.</span><span class="n">creationDate</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">_print</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">@&quot;</span><span class="se">\t</span><span class="s">Last Modified On: %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">dateFormatter</span> <span class="nl">stringFromDate:</span><span class="n">reminder</span><span class="p">.</span><span class="n">lastModifiedDate</span><span class="p">]);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSDate</span> <span class="o">*</span><span class="n">startDate</span> <span class="o">=</span> <span class="p">[</span><span class="n">reminder</span><span class="p">.</span><span class="n">startDateComponents</span> <span class="n">date</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">startDate</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">_print</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">@&quot;</span><span class="se">\t</span><span class="s">Started On: %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">dateFormatter</span> <span class="nl">stringFromDate:</span><span class="n">startDate</span><span class="p">]);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSDate</span> <span class="o">*</span><span class="n">dueDate</span> <span class="o">=</span> <span class="p">[</span><span class="n">reminder</span><span class="p">.</span><span class="n">dueDateComponents</span> <span class="n">date</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">dueDate</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">_print</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">@&quot;</span><span class="se">\t</span><span class="s">Due On: %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">dateFormatter</span> <span class="nl">stringFromDate:</span><span class="n">dueDate</span><span class="p">]);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">reminder</span><span class="p">.</span><span class="n">hasNotes</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">_print</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">@&quot;</span><span class="se">\t</span><span class="s">Notes: %@</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">reminder</span><span class="p">.</span><span class="n">notes</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Completing a Reminder</h3>
+
+<p>Completing reminder is a simple matter of setting the completed property to YES and saving it.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">completeReminder</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">reminder</span><span class="p">.</span><span class="n">completed</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">;</span>
+</span><span class='line'><span class="kt">BOOL</span> <span class="n">success</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">saveReminder:</span><span class="n">reminder</span> <span class="nl">commit:</span><span class="n">YES</span> <span class="nl">error:</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">error</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">_print</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">@&quot;rem: Error marking Reminder (%@) from list %@</span><span class="se">\n\t</span><span class="s">%@&quot;</span><span class="p">,</span> <span class="n">reminder_id</span><span class="p">,</span> <span class="n">calendar</span><span class="p">,</span> <span class="p">[</span><span class="n">error</span> <span class="n">localizedDescription</span><span class="p">]);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>That's it. Now I have a simple command-line utility to let me list, view, remove and complete reminders. The project is up on <a href="https://github.com/kykim/rem">Github</a>. Feel free to use and give me your feedback. I have plans to extend <code>rem</code>, check the <a href="https://github.com/kykim/rem/issues">issues</a> for what's in the queue.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Accessing Reminders with EventKit (Part 2)]]></title>
+    <link href="http://kykim.com//blog/2012/10/15/accessing-reminders-with-eventkit-part-2/"/>
+    <updated>2012-10-15T12:05:00-04:00</updated>
+    <id>http://kykim.com//blog/2012/10/15/accessing-reminders-with-eventkit-part-2</id>
+    <content type="html"><![CDATA[<p><em><a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a></em></p>
+
+<p>I want a command-line tool to access Reminders.app data. I was inspired by the command-line password manager, <a href="http://zx2c4.com/projects/password-store">pass</a>. Based on the man page, <code>pass</code> uses the following parameters:
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>pass <span class="o">[</span>COMMAND<span class="o">]</span> <span class="o">[</span>OPTIONS<span class="o">]</span>... <span class="o">[</span>ARGS<span class="o">]</span>...
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+This seems like a good model to follow. I'm going to name this command <code>rem</code>, short for <em>reminders</em>. It also reminds me of my old <a href="http://en.wikipedia.org/wiki/BASIC">BASIC</a> days, where <code>REM</code> started a comment line.</p>
+
+<p>Here's the functionality I want for the first iteration:</p>
+
+<ul>
+<li> <code>rem [ls] [calendar]</code> list reminders</li>
+<li> <code>rem rm &lt;calendar&gt; &lt;reminder_id&gt;</code> remove a reminder</li>
+<li> <code>rem cat &lt;calendar&gt; &lt;reminder_id&gt;</code> show a reminder details</li>
+<li> <code>rem done &lt;calendar&gt; &lt;reminder_id&gt;</code> mark a reminder as completed</li>
+</ul>
+
+
+<p>I'm not including functionality to add or modify a reminder (yet). I just don't need this functionality right now, as I usually add reminders via my iPhone.</p>
+
+<p>Start with the OSX Command Line Tool Application template, with default options of using Foundation and ARC. Add <code>EventKit.framework</code> to the <code>rem</code> target and away we go.</p>
+
+<!-- more -->
+
+
+<h3>Parsing the Command-line Arguments</h3>
+
+<p>I need to process the application arguments to know what I want to do. Before doing that, some set up. I <code>#define</code> an array of command strings, and an enumerated type that maps to each element of the command string array.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">COMMANDS</span> <span class="err">@</span><span class="p">[</span> <span class="s">@&quot;ls&quot;</span><span class="p">,</span> <span class="s">@&quot;rm&quot;</span><span class="p">,</span> <span class="s">@&quot;cat&quot;</span><span class="p">,</span> <span class="s">@&quot;done&quot;</span><span class="p">,</span> <span class="s">@&quot;help&quot;</span><span class="p">,</span> <span class="s">@&quot;version&quot;</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">typedef</span> <span class="k">enum</span> <span class="n">_CommandType</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">CMD_UNKNOWN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+</span><span class='line'><span class="n">CMD_LS</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'><span class="n">CMD_RM</span><span class="p">,</span>
+</span><span class='line'><span class="n">CMD_CAT</span><span class="p">,</span>
+</span><span class='line'><span class="n">CMD_DONE</span><span class="p">,</span>
+</span><span class='line'><span class="n">CMD_HELP</span><span class="p">,</span>
+</span><span class='line'><span class="n">CMD_VERSION</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span> <span class="n">CommandType</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">CommandType</span> <span class="n">command</span><span class="p">;</span>
+</span><span class='line'><span class="k">static</span> <span class="n">NSString</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">calendar</span><span class="p">;</span>
+</span><span class='line'><span class="k">static</span> <span class="n">NSString</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">reminder_id</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The three global variables hold the parsed values from the command arguments. Some consider it bad form to use a global like this, but it's just easier to keep it global rather than passing it around.</p>
+
+<p>The function, <code>parseArguments</code>, handles the argument parsing and is called from <code>main</code>. I won't go over the entire implementation, but want to make note of the of a few things.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">parseArguments</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">command</span> <span class="o">=</span> <span class="n">CMD_LS</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableArray</span> <span class="nl">arrayWithArray:</span><span class="p">[[</span><span class="n">NSProcessInfo</span> <span class="n">processInfo</span><span class="p">]</span> <span class="n">arguments</span><span class="p">]];</span>
+</span><span class='line'><span class="p">[</span><span class="n">args</span> <span class="nl">removeObjectAtIndex:</span><span class="mi">0</span><span class="p">];</span>    <span class="c1">// pop off application argument</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// args array is empty, command was excuted without arguments</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'><span class="n">command</span> <span class="o">=</span> <span class="p">(</span><span class="n">CommandType</span><span class="p">)[</span><span class="n">COMMANDS</span> <span class="nl">indexOfObject:</span><span class="n">cmd</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">command</span> <span class="o">==</span> <span class="n">NSNotFound</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;rem: Error unknown command %s&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span> <span class="nl">cStringUsingEncoding:</span><span class="n">NSUTF8StringEncoding</span><span class="p">]);</span>
+</span><span class='line'>    <span class="n">usage</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>I use <a href="https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSProcessInfo_Class/Reference/Reference.html">NSProcessInfo</a> to get our command-line arguments. The first element will be the application, so I pop that off.</p>
+
+<p>You can see where how the <code>COMMAND</code> string array and <code>CommandType</code> enumeration have to lineup. I can search the <code>COMMAND</code> array for the matching string, and the index with be the CommandType enumeration value. Better than making a giant <code>if</code> or <code>switch</code> statement. If the command argument isn't found the command string array, then I print an error message and spit out the usage.</p>
+
+<p>The rest of the function reads the reminder list (<em>calendar</em>) name and reminder id from the <code>args</code> array.</p>
+
+<h3>Loading and Sorting Reminders</h3>
+
+<p>Two functions to handle reminders. <code>fetchReminders</code> will load the reminders from the event store. <code>sortReminders</code> will organize the fetched reminders into a dictionary keyed on reminder list (calendar) name.</p>
+
+<p>Here's <code>fetchReminders</code>.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="n">NSArray</span><span class="o">*</span> <span class="nf">fetchReminders</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">__block</span> <span class="n">NSArray</span> <span class="o">*</span><span class="n">reminders</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'><span class="n">__block</span> <span class="kt">BOOL</span> <span class="n">fetching</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSPredicate</span> <span class="o">*</span><span class="n">predicate</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">predicateForRemindersInCalendars:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">store</span> <span class="nl">fetchRemindersMatchingPredicate:</span><span class="n">predicate</span> <span class="nl">completion:</span><span class="o">^</span><span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="n">ekReminders</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">reminders</span> <span class="o">=</span> <span class="n">ekReminders</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fetching</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'><span class="p">}];</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">while</span> <span class="p">(</span><span class="n">fetching</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">NSRunLoop</span> <span class="n">currentRunLoop</span><span class="p">]</span> <span class="nl">runUntilDate:</span><span class="p">[</span><span class="n">NSDate</span> <span class="nl">dateWithTimeIntervalSinceNow:</span><span class="mf">0.01</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="n">reminders</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The <code>EKEventStore</code> instance is a global that's instantiated at application start. I use it create a predicate to fetch all the reminders across all calendars. Recall that in <a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a>, I noted that the event store can be expensive to create and release. For a GUI (Cocoa or iOS), I'd create the event store in the application delegate and have it persist for the lifetime of the app.</p>
+
+<p>I have some funky coding going on here. What's up with the <code>while</code> loop after the call to <code>fetchRemindersMatchingPredicate:completion:</code>? I have a boolean flag, <code>fetching</code>, that gets flipped inside the completion handler block. Until it gets flipped, the application's <a href="https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSRunLoop_Class/Reference/Reference.html">runloop</a> will run for 1/100th of a second. During this 1/100th of second, the completion handler block <em>may</em> get invoked. If so, the <code>fetching</code> flag will be flipped, and the app will leave the <code>while</code> loop.</p>
+
+<p><code>fetchRemindersMatchingPredicate:completion:</code> is an <em>asynchronous</em> call. It gets sent to a another thread to run in the background. The problem is that the completion handler block gets invoked back on the main thread which can cause problems. Ideally, I would try to use <a href="https://developer.apple.com/library/mac/#documentation/Performance/Reference/GCD_libdispatch_Ref/Reference/reference.html">Grand Central Dispatch</a> like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_semaphore_t</span> <span class="n">sema</span> <span class="o">=</span> <span class="n">dispatch_semaphore_create</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">store</span> <span class="nl">fetchRemindersMatchingPredicate:</span><span class="n">predicate</span> <span class="nl">completion:</span><span class="o">&lt;</span><span class="n">sup</span><span class="o">&gt;</span><span class="p">(</span><span class="n">NSArray</span><span class="o">&lt;/</span><span class="n">sup</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">ekReminders</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">reminders</span> <span class="o">=</span> <span class="n">ekReminders</span><span class="p">;</span>
+</span><span class='line'><span class="n">dispatch_semaphore_signal</span><span class="p">(</span><span class="n">sema</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}];</span>
+</span><span class='line'><span class="n">dispatch_semaphore_wait</span><span class="p">(</span><span class="n">sema</span><span class="p">,</span> <span class="n">DISPATCH_TIME_FOREVER</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Since the completion handler block gets invoked on the main thread, the semaphone blocks, and the signal is never sent. So looping over the run loop seems like the best bet.</p>
+
+<p><strong>Note:</strong> <em>This is also the reason I'm loading all the reminders, then sorting them. If I had access to a synchronous reminder fetch, my first instinct would be to loop over each reminder list. However, loading all at once, then sorting is probably faster.</em></p>
+
+<p>Now that I have an array of reminders, I sort them into a dictionary, keyed on calendar names. I ignore the completed reminders.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="n">NSDictionary</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">sortReminders</span><span class="p">(</span><span class="n">NSArray</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">reminders</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="n">results</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">reminders</span> <span class="o">!=</span> <span class="nb">nil</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">reminders</span><span class="p">.</span><span class="n">count</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableDictionary</span> <span class="n">dictionary</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">EKReminder</span> <span class="o">*</span><span class="n">r</span> <span class="k">in</span> <span class="n">reminders</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">completed</span><span class="p">)</span>
+</span><span class='line'>            <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">EKCalendar</span> <span class="o">*</span><span class="n">calendar</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="n">calendar</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">([</span><span class="n">results</span> <span class="nl">objectForKey:</span><span class="n">calendar</span><span class="p">.</span><span class="n">title</span><span class="p">]</span> <span class="o">==</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="p">[</span><span class="n">results</span> <span class="nl">setObject:</span><span class="p">[</span><span class="n">NSMutableArray</span> <span class="n">array</span><span class="p">]</span> <span class="nl">forKey:</span><span class="n">calendar</span><span class="p">.</span><span class="n">title</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">calendarReminders</span> <span class="o">=</span> <span class="p">[</span><span class="n">results</span> <span class="nl">objectForKey:</span><span class="n">calendar</span><span class="p">.</span><span class="n">title</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">calendarReminders</span> <span class="nl">addObject:</span><span class="n">r</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">return</span> <span class="n">results</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Handling the Command</h3>
+
+<p>I've got my command-line arguments, and I've got my (sorted) reminders. Now we need to do something. <code>handleCommand</code> is a function around a switch statement for command-specific functions. We'll just stub out those functions right now.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">listReminders</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;List Reminders&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="kt">void</span> <span class="n">removeReminder</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Remove Reminders %@/%@&quot;</span><span class="p">,</span> <span class="n">calendar</span><span class="p">,</span> <span class="n">reminder_id</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="kt">void</span> <span class="n">showReminder</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Show Reminders %@/%@&quot;</span><span class="p">,</span> <span class="n">calendar</span><span class="p">,</span> <span class="n">reminder_id</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="kt">void</span> <span class="n">completeReminder</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Complete Reminders %@/%@&quot;</span><span class="p">,</span> <span class="n">calendar</span><span class="p">,</span> <span class="n">reminder_id</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="kt">void</span> <span class="n">handleCommand</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">switch</span> <span class="p">(</span><span class="n">command</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nl">CMD_LS:</span>
+</span><span class='line'>        <span class="n">listReminders</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nl">CMD_RM:</span>
+</span><span class='line'>        <span class="n">removeReminder</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nl">CMD_CAT:</span>
+</span><span class='line'>        <span class="n">showReminder</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nl">CMD_DONE:</span>
+</span><span class='line'>        <span class="n">completeReminder</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nl">CMD_HELP:</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nl">CMD_VERSION:</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>At this point, I can build <code>rem</code> and run it. Each command I defined goes to the function that should handle it. But we're not printing anything out yet. I'll get to that in Part 3.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Accessing Reminders with EventKit (part 1)]]></title>
+    <link href="http://kykim.com//blog/2012/10/09/accessing-reminders-with-eventkit-part-1/"/>
+    <updated>2012-10-09T15:56:00-04:00</updated>
+    <id>http://kykim.com//blog/2012/10/09/accessing-reminders-with-eventkit-part-1</id>
+    <content type="html"><![CDATA[<p>I'm old school when it comes to certain things. When the <a href="http://en.wikipedia.org/wiki/PowerBook_G4#Titanium_PowerBook_G4">Titanium Powerbook G4</a> came out, I was excited because I could have six Terminal windows open at once. I still use <a href="http://www.gnu.org/software/emacs/">Emacs</a>. My biggest complaint about Xcode 4 is they got rid of the Emacs client integration.</p>
+
+<p>On the other hand, sometimes newer things work for me as well. When Reminders came out in iOS 5, I started using it, but wasn't diligent about it. Once it got <a href="http://www.apple.com/osx/whats-new/features.html#reminders">iCloud and Mountain Lion integration</a>, I started using it a lot more. I even use <a href="http://www.apple.com/ios/whats-new/#siri">Siri</a> to make a reminder. I make a reminder on my iPhone, and I have it on all my devices, so I actually keep track of things.</p>
+
+<p>Recently, I started using the command line password manager, <a href="http://zx2c4.com/projects/password-store">pass</a>, to manage my passwords. I tried other password managers, and this is a case where the simpler command-line interface works for me. You type <code>pass</code> and get a list of all your accounts and passwords, which you catagorize. There are simple commands to add, extract and delete passwords. It's all encrypted using <a href="http://www.gnupg.org">GPG</a>, so I don't need to worry if I lose my laptop. All the data is stored in my home directory, so it's part of my <a href="http://www.apple.com/osx/whats-new/features.html#timemachine">Time Machine</a> backups.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>pass  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>zx2c4@laptop ~ <span class="nv">$ </span>pass
+</span><span class='line'>Password Store
+</span><span class='line'>├── Business
+</span><span class='line'>│   ├── some-silly-business-site.com
+</span><span class='line'>│   └── another-business-site.net
+</span><span class='line'>├── Email
+</span><span class='line'>│   ├── donenfeld.com
+</span><span class='line'>│   └── zx2c4.com
+</span><span class='line'>└── France&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;├── bank
+</span><span class='line'>├── freebox
+</span><span class='line'>└── Mobilephone
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>I wanted some similar for to access reminders. Now Apple's been pretty good about making command-line equivalents for a lot of UI tools (think DiskUtility.app and diskutil), but this is one where they don't have anything. A quick Google didn't really find anything for me either.</p>
+
+<p>So I have roll up my sleeves and write something myself.</p>
+
+<!-- more -->
+
+
+<p>Turns out that along with releasing Reminders in Mountain Lion, Apple has given us an SDK to access the data store behind Calendar and Reminders: <strong>EventKit</strong>. <a href="https://developer.apple.com/library/mac/#documentation/DataManagement/Conceptual/EventKitProgGuide">EventKit</a> was first introduced in the OSX and iOS SDKs to give access to Calendar. Now with OSX Mountain Lion and iOS 6, Apple extended EventKit to grant access to Reminders. This extension to EventKit was possible because underneath it all, items in Reminders (“<em>reminders</em>”) are an extension of events in Calendar (“<em>events</em>”). In fact, both sets of data are stored in a single database, which Apple calls the Calendar database.</p>
+
+<p>Why not use something like <a href="http://sqlite.org">SQLite</a> and let us access the calendar database directly? Odds are that your local calendar(s) are synchronized with calendars on server (i.e. iCloud, gCal, etc), typically using <a href="http://caldav.calconnect.org">CalDAV</a>. In order to maintain that synchronization, it’s easier to mediate all access to the local Calendar database to know when changes need to propagated to the server and known when changes have arrived from the server.</p>
+
+<p><strong>Note:</strong> <em>I’m building an application to run in OSX. Most of what I cover is applicable for iOS, but there are some differences. For example, instantiating the event store is different between OSX and iOS. Read the <a href="https://developer.apple.com/library/mac/#documentation/DataManagement/Conceptual/EventKitProgGuide">Calendar and Reminders Programming Guide</a>. Also, I’m building an application to access reminder, I won’t be covering event access.</em></p>
+
+<p>Let's review the EventKit framework with respect to reminders.</p>
+
+<h3>Event Store</h3>
+
+<p>At the root of EventKit is the class <code>EKEventStore</code>. This represents the Calendar database. <code>EKEventStore</code> is a fairly heavy-weight object, taking a (relatively) long time to instantiate and release. As a result, your application should only instantiate a single <code>EKEventStore</code>.</p>
+
+<p>To instantiate your event store, you invoke the initializer, <code>initWithAccessToEntityType:</code>, and <code>EKEntityMask</code> for reminders.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">EKEventStore</span> <span class="o">*</span><span class="n">store</span> <span class="o">=</span> <span class="p">[[</span><span class="n">EKEventStore</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithAccessToEntityType:</span><span class="n">EKEntityTypeReminder</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>With iOS, you instantiate your event store with a simple call to <code>init</code>. Then, you request access to reminders using <code>requestAccessToEntityType:completion:</code>. This invoking this method will cause iOS to ask the user if your application is allowed to access your Calendar database. You need to handle both cases in the completion block. This code is not in the OSX EventKit, since access to the Calendar database is granted automatically.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">EKEventStore</span> <span class="o">*</span><span class="n">store</span> <span class="o">=</span> <span class="p">[</span><span class="n">EKEventStore</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">[</span><span class="n">store</span> <span class="nl">requestAccessToEntityType:</span><span class="n">EKEntityTypeReminder</span> <span class="nl">completion:</span><span class="o">&lt;</span><span class="n">sup</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">BOOL</span><span class="o">&lt;/</span><span class="n">sup</span><span class="o">&gt;</span> <span class="n">granted</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">// access code here</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Reminder Lists</h3>
+
+<p>EventKit defines the class <code>EKCalendar</code> to represent a calendar. Events are represented with the class <code>EKEvent</code>. Reminders are modeled with the <code>EKReminder</code> class. <code>EKEvent</code> and <code>EKReminder</code> are extensions of the abstract class <code>EKCalendarItem</code>. Rather than defining a new class to contain a list of reminders, Apple chose to leverage the <code>EKCalendar</code> class as the container of reminders. Conceptually, Reminders calls these Reminder Lists, but internal to the event store, they are just instances of <code>EKCalendar</code>.</p>
+
+<p><code>EKEventStore</code> defines two properties to access default the calendar and reminder list.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">EKCalendar</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">defaultCalendar</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="n">defaultCalendarForNewEvents</span><span class="p">];</span>
+</span><span class='line'><span class="n">EKCalendar</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">defaultReminderList</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="n">defaultCalendarForNewReminders</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>If you want to retrieve all calendars or reminder lists in the event store, you use the <code>calendarsForEntityType:</code> method, specifying the <code>EKEntityType</code> you want.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSArray</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">calendars</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">calendarsForEntityType:</span><span class="n">EKEntityTypeEvent</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSArray</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">reminderLists</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">calendarsForEntityType:</span><span class="n">EKEntityTypeReminder</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>There’s another method, <code>calendarWithIdentifier:</code>, that fetches a specific calendar, assuming you know the calendar’s unique identifier.</p>
+
+<h3>Reminders</h3>
+
+<p>To create a new reminder, use the <code>EKReminder</code> class method <code>reminderWithEventStore:</code>. In order for the reminder to be valid, you need to provide values for the <code>title</code> and <code>calendar</code> properties.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">EKReminder</span> <span class="o">*</span><span class="n">new_reminder</span> <span class="o">=</span> <span class="p">[</span><span class="n">EKReminder</span> <span class="nl">reminderWithEventStore:</span><span class="n">store</span><span class="p">];</span>
+</span><span class='line'><span class="n">new_reminder</span><span class="p">.</span><span class="n">title</span> <span class="o">=</span> <span class="err">@“</span><span class="n">New</span> <span class="n">Reminder</span><span class="err">”</span><span class="p">;</span>
+</span><span class='line'><span class="n">new_reminder</span><span class="p">.</span><span class="n">calendar</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="n">defaultCalendarForNewReminders</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>To specify a start date, you use the <code>startDateComponents</code> property. To specify a due date, use the <code>dueDateComponents</code> property. These two properties are of the <code>NSDateComponents</code>(<a href="https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSDateComponents_Class/Reference/Reference.html">doc</a>) class, <strong>not</strong> the <code>NSDate</code> class.</p>
+
+<p>There are two EKReminder properties associated with reminder completion:</p>
+
+<ul>
+<li> <code>completed</code> a <code>BOOL</code> flag</li>
+<li> <code>completionDate</code> an <code>NSDate</code> instance marking when the reminder was completed.</li>
+</ul>
+
+
+<p>Setting on of these properties will adjust the other. For example, if you set <code>completed</code> to <code>YES</code>, then <code>completionDate</code> will be set to the current date. Setting <code>completed</code> to <code>NO</code>, sets <code>completionDate</code> to <code>nil</code>. Conversely, setting <code>completionDate</code> to a date will set <code>completed</code> to <code>YES</code>; and setting <code>completionDate</code> to <code>nil</code> will set <code>completed</code> to <code>NO</code>.</p>
+
+<p>To save a reminder, call the <code>saveReminder:commit:error:</code> method. To delete a reminder, use the <code>removeReminder:commit:error:</code> method.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">;</span>
+</span><span class='line'><span class="kt">BOOL</span> <span class="n">success</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">saveReminder:</span><span class="n">reminder</span> <span class="nl">commit:</span><span class="n">YES</span> <span class="nl">error:</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">error</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">// Handle failure here, look at error instance</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">;</span>
+</span><span class='line'><span class="kt">BOOL</span> <span class="n">success</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">removeReminder:</span><span class="n">reminder</span> <span class="nl">commit:</span><span class="n">YES</span> <span class="nl">error:</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">error</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">// Handle failure here, look at error instance</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>In both cases, the <code>commit</code> flag is used to tell the event store whether to apply the save/delete immediately, or queue the action as part of a batch. If you pass <code>commit:NO</code>, then the changes will not happen until you invoke the EKEventStore method, <code>commit:</code>.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">;</span>
+</span><span class='line'><span class="kt">BOOL</span> <span class="n">success</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">commit:</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">error</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">// Handle failure here, look at error instance</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Retrieving Reminders</h3>
+
+<p>To retrieve your reminders from the event store, you use the <code>fetchRemindersMatchingPredicate:completion:</code> method. Predicates are objects that encapsulate the conditions to perform a search or query. Even though we use an <code>NSPredicate</code>, we can’t construct our EventKit predicate by hand. We have to use one of the three predicate construction methods on <code>EKEventStore</code>.</p>
+
+<ul>
+<li> <code>predicateForIncompleteRemindersWithDueDateStarting:ending:calendars:</code> find all incomplete Reminder items within a date range, for a given array of Reminder Lists.</li>
+<li> <code>predicateForCompletedRemindersWithCompletionDateStarting:ending:calendars:</code> find all completed Reminder items within a date rage for a given array of Reminder Lists.</li>
+<li> <code>predicateForRemindersInCalendars:</code> find all Reminder items for a given array of Reminder Lists.</li>
+</ul>
+
+
+<p>To fetch across all reminder lists (calendars), you can simply specify <code>nil</code> for the calendar array.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSPredicate</span> <span class="o">*</span><span class="n">predicate</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">predicateForRemindersInCalendars:</span><span class="nb">nil</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>For the predicate generator methods that take date ranges, you can use the <code>NSDate</code> class methods <code>distantPast</code> and <code>distantFuture</code> to fetch all reminder items.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSPredicate</span> <span class="o">*</span><span class="n">predicate</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">predicateForIncompleteRemindersWithDueDateStarting:</span><span class="p">[</span><span class="n">NSDate</span> <span class="n">distantPast</span><span class="p">]</span> <span class="nl">ending:</span><span class="p">[</span><span class="n">NSDate</span> <span class="n">distantFuture</span><span class="p">]</span> <span class="nl">calendars:</span><span class="nb">nil</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Once you have your predicate, you can perform your fetch, with a completion handler block.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">store</span> <span class="nl">fetchRemindersMatchingPredicate:</span><span class="n">predicate</span> <span class="nl">completion:</span><span class="o">&lt;</span><span class="n">sup</span><span class="o">&gt;</span><span class="p">(</span><span class="n">NSArray</span><span class="o">&lt;/</span><span class="n">sup</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">reminders</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">for</span> <span class="p">(</span><span class="n">EKReminder</span> <span class="o">*</span><span class="n">reminder</span> <span class="k">in</span> <span class="n">reminders</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Process each reminder here</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The completion handler block is send an array of reminder items that match the predicate. This fetch is performed asynchronously and doesn’t need to be dispatched to another thread. However, the completion handler block is invoked on the main thread, which caused problems for me (I’ll get to that in a little bit).
+As with calendars, there is a method to retrieve a specific reminder if you know its unique identifier, <code>calendarItemWithIdentifier:</code>. You probably won’t use this method as it’s unlikely that you’ll have an item’s unique identifier handy.</p>
+
+<h3>Alarms, Recurrence, and External Changes</h3>
+
+<p>I’m not going to cover these features in any detail, since I don’t need them for my command-line application. I’ve provided some links to the Apple documentation.</p>
+
+<ul>
+<li> <a href="https://developer.apple.com/library/mac/#documentation/DataManagement/Conceptual/EventKitProgGuide/ConfiguringAlarms/ConfiguringAlarms.html">Alarms</a>: You can set an alarm for a given reminder, which can be time or location based.</li>
+<li> <a href="https://developer.apple.com/library/mac/#documentation/DataManagement/Conceptual/EventKitProgGuide/CreatingRecurringEvents/CreatingRecurringEvents.html">Recurrence</a>: You can set a reminder to repeat.</li>
+<li> <a href="https://developer.apple.com/library/mac/#documentation/DataManagement/Conceptual/EventKitProgGuide/ObservingChanges/ObservingChanges.html">External Changes</a>: As I mentioned earlier, odds are your calendars are tied to a server somewhere. As a result changes from the outside need to be reflected in you EventKit application.</li>
+</ul>
+
+
+<h3>Coming Up: Building Our Command-line Reminders Tool</h3>
+
+<p>Ok, that's a pretty good review of the EventKit framework. My next post will use this information to build the command-line tool.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: WWDC | This Is My Blog]]></title>
+  <link href="http://kykim.com//blog/categories/wwdc/atom.xml" rel="self"/>
+  <link href="http://kykim.com//"/>
+  <updated>2013-02-18T11:50:28-05:00</updated>
+  <id>http://kykim.com//</id>
+  <author>
+    <name><![CDATA[Kevin Y. Kim]]></name>
+    <email><![CDATA[kykim@kykim.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The First Rule of Secret Sushi]]></title>
+    <link href="http://kykim.com//blog/2012/06/13/the-first-rule-of-secret-sushi/"/>
+    <updated>2012-06-13T23:54:00-04:00</updated>
+    <id>http://kykim.com//blog/2012/06/13/the-first-rule-of-secret-sushi</id>
+    <content type="html"><![CDATA[<p>Don't tell anyone where it is.</p>
+
+<p>My friend Bruce is a member of the inner circle (cabal?). Everytime I come to San Francisco, I try to get him to take me there. My first time was at WWDC last year. Since then, I've gone three more times, and brought many of my colleagues with me. Now it's expected that I make arrangements for any trip to SF.</p>
+
+<p>This time I brought my colleagues Simon and Sue.</p>
+
+<!-- more -->
+
+
+<h5>We've arrived</h5>
+
+<p><img src="/images/20120613/01.png" title="We've arrived" >
+We had to wait for the previous seating (a birthday party) to finish.</p>
+
+<h5>House Rules</h5>
+
+<p><img src="/images/20120613/02.png" title="House Rules" >
+Rumor has it that you can get banned for violating the rules.</p>
+
+<h5>Start off with some sake</h5>
+
+<p><img src="/images/20120613/03.png" title="Start off with some sake" >
+Don't know if you can tell, but that's a big bottle.</p>
+
+<p>I forgot to snap a picture of the first dish. It was mackeral with a ginger soy sauce, garnished with scallions.</p>
+
+<h5>Second Course</h5>
+
+<p><img src="/images/20120613/04.png" title="Second Course" >
+A salad with calamari, sprouts and dressing.</p>
+
+<h5>Third Course</h5>
+
+<p><img src="/images/20120613/05.png" title="Third Course" >
+Three mushroom with a soy-based sauce, baked.</p>
+
+<h5>Nobu-san preparing the sashimi</h5>
+
+<p><img src="/images/20120613/06.png" title="Nobu-san preparing the sashimi" >
+Our host at work.</p>
+
+<h5>Fourth Course</h5>
+
+<p><img src="/images/20120613/07.png" title="Fourth Course" >
+That's a lot of fish!</p>
+
+<h5>Fifth Course</h5>
+
+<p><img src="/images/20120613/08.png" title="Fifth Course" >
+Pumpkin, Burdock (I think) and Zucchini.</p>
+
+<h5>Sixth Course</h5>
+
+<p><img src="/images/20120613/09.png" title="Sixth Course" >
+Neck or Shoulder of a yellow mackeral</p>
+
+<h5>Seventh Course</h5>
+
+<p><img src="/images/20120613/10.png" title="Seventh Course" >
+Broiled Eel. Unagi!</p>
+
+<h5>Dessert</h5>
+
+<p><img src="/images/20120613/11.png" title="Dessert" >
+Melon with Meyer lemon. Never had lemon juice on a melon before. It was delicious!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[WWDC Day One]]></title>
+    <link href="http://kykim.com//blog/2012/06/12/wwdc-day-one/"/>
+    <updated>2012-06-12T11:10:00-04:00</updated>
+    <id>http://kykim.com//blog/2012/06/12/wwdc-day-one</id>
+    <content type="html"><![CDATA[<p>Hectic first day at WWDC. Rather than recap what others have done better than me, I'll just put up some pictures.</p>
+
+<!-- more -->
+
+
+<h5>Looking for a place in line</h5>
+
+<p><img src="/images/wwdc2012/1.png" title="Looking for a place in line" ></p>
+
+<h5>Waiting for the keynote</h5>
+
+<p><img src="/images/wwdc2012/2.png" title="Waiting for the keynote" ></p>
+
+<h5>Tim takes the stage</h5>
+
+<p><img src="/images/wwdc2012/3.png" title="Tim takes the stage" ></p>
+
+<h5>(Fuzzy) profile of the new MacBook Pro</h5>
+
+<p><img src="/images/wwdc2012/4.png" title="(Fuzzy) profile of the new MacBook Pro" ></p>
+
+<p>I can't believe I forgot to take a picture of <a href="http://img.ibtimes.com/www/data/images/full/2012/06/11/280874-craig-federighi-apple-senior-vice-president-software-engineering-stand.jpg">Hair Force One</a></p>
+
+<p>The rest of the day was a blur, and we ended it at a party hosted by our friends at [Crashlytics](http://www.crashlytics.com]
+<img src="/images/wwdc2012/5.png" title="Party!" ></p>
+]]></content>
+  </entry>
+  
+</feed>
