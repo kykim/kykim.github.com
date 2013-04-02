@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Nike | This Is My Blog]]></title>
-  <link href="http://kykim.com//blog/categories/nike/atom.xml" rel="self"/>
-  <link href="http://kykim.com//"/>
-  <updated>2013-02-18T11:50:28-05:00</updated>
-  <id>http://kykim.com//</id>
+  <link href="http://kykim.github.com/blog/categories/nike/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
   <author>
     <name><![CDATA[Kevin Y. Kim]]></name>
     <email><![CDATA[kykim@kykim.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Greatness]]></title>
-    <link href="http://kykim.com//blog/2012/08/09/greatness/"/>
+    <link href="http://kykim.github.com/blog/2012/08/09/greatness/"/>
     <updated>2012-08-09T23:00:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/08/09/greatness</id>
+    <id>http://kykim.github.com/blog/2012/08/09/greatness</id>
     <content type="html"><![CDATA[<p>Awesome ad.</p>
 
 <iframe width="560" height="315" src="http://www.youtube.com/embed/LsXRj89cWa0" frameborder="0" allowfullscreen></iframe>

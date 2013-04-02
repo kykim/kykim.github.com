@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Zen | This Is My Blog]]></title>
-  <link href="http://kykim.com//blog/categories/zen/atom.xml" rel="self"/>
-  <link href="http://kykim.com//"/>
-  <updated>2013-02-18T11:50:28-05:00</updated>
-  <id>http://kykim.com//</id>
+  <link href="http://kykim.github.com/blog/categories/zen/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
   <author>
     <name><![CDATA[Kevin Y. Kim]]></name>
     <email><![CDATA[kykim@kykim.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Testivus on Code Coverage]]></title>
-    <link href="http://kykim.com//blog/2012/07/24/code-coverage-and-the-zen-master/"/>
+    <link href="http://kykim.github.com/blog/2012/07/24/code-coverage-and-the-zen-master/"/>
     <updated>2012-07-24T20:11:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/07/24/code-coverage-and-the-zen-master</id>
+    <id>http://kykim.github.com/blog/2012/07/24/code-coverage-and-the-zen-master</id>
     <content type="html"><![CDATA[<p>From <a href="http://www.artima.com/forums/flat.jsp?forum=106&amp;thread=204677">Testivus on Test Coverage</a></p>
 
 <p>Early one morning, a programmer asked the great master:<br/>

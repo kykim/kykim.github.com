@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: iPad | This Is My Blog]]></title>
-  <link href="http://kykim.com//blog/categories/ipad/atom.xml" rel="self"/>
-  <link href="http://kykim.com//"/>
-  <updated>2013-02-18T11:50:28-05:00</updated>
-  <id>http://kykim.com//</id>
+  <link href="http://kykim.github.com/blog/categories/ipad/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
   <author>
     <name><![CDATA[Kevin Y. Kim]]></name>
     <email><![CDATA[kykim@kykim.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[iPad Charging Costs $1.36 per Year]]></title>
-    <link href="http://kykim.com//blog/2012/06/25/ipad-charging-costs/"/>
+    <link href="http://kykim.github.com/blog/2012/06/25/ipad-charging-costs/"/>
     <updated>2012-06-25T13:19:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/06/25/ipad-charging-costs</id>
+    <id>http://kykim.github.com/blog/2012/06/25/ipad-charging-costs</id>
     <content type="html"><![CDATA[<p>According to the Electric Power Research Institute <a href="http://www.epri.com/">(ERPI)</a>, it only costs $1.36 per year to charge your iPad <a href="http://www.cultofmac.com/175195/your-new-ipad-costs-just-1-36-per-year-to-charge/">(source)</a>.</p>
 
 <!-- more -->

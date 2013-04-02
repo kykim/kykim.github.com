@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: blog | This Is My Blog]]></title>
-  <link href="http://kykim.com//blog/categories/blog/atom.xml" rel="self"/>
-  <link href="http://kykim.com//"/>
-  <updated>2013-02-18T11:50:28-05:00</updated>
-  <id>http://kykim.com//</id>
+  <link href="http://kykim.github.com/blog/categories/blog/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
   <author>
     <name><![CDATA[Kevin Y. Kim]]></name>
     <email><![CDATA[kykim@kykim.com]]></email>
@@ -14,10 +14,25 @@
 
   
   <entry>
+    <title type="html"><![CDATA[XPO929 Show Review]]></title>
+    <link href="http://kykim.github.com/blog/2013/04/02/xpo929-show-review/"/>
+    <updated>2013-04-02T18:43:00-04:00</updated>
+    <id>http://kykim.github.com/blog/2013/04/02/xpo929-show-review</id>
+    <content type="html"><![CDATA[<p>Wow, it's been more than two months since my last blog post where I promised to post more. Sorry folks.</p>
+
+<p>In the meantime, here's a review my bandmate found for our show at <a href="http://www.xpo929.com">XPO929</a> last <a href="http://bushwickdaily.com/2012/10/an-uncmj-night-at-xpo-929">October</a>.</p>
+
+<p>By the way, our new record, Freedom Now!, is out now.
+<a href="http://whartontiers.bandcamp.com/album/freedom-now">Bandcamp</a>
+<a href="https://itunes.apple.com/us/album/freedom-now!/id608870670">iTunes</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Happy Belated New Year]]></title>
-    <link href="http://kykim.com//blog/2013/02/18/happy-belated-new-year/"/>
+    <link href="http://kykim.github.com/blog/2013/02/18/happy-belated-new-year/"/>
     <updated>2013-02-18T11:17:00-05:00</updated>
-    <id>http://kykim.com//blog/2013/02/18/happy-belated-new-year</id>
+    <id>http://kykim.github.com/blog/2013/02/18/happy-belated-new-year</id>
     <content type="html"><![CDATA[<p>It's been a while since my last post. Without going into too much detail (which I may do later),
 here's the quick recap:</p>
 

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Tips | This Is My Blog]]></title>
-  <link href="http://kykim.com//blog/categories/tips/atom.xml" rel="self"/>
-  <link href="http://kykim.com//"/>
-  <updated>2013-02-18T11:50:28-05:00</updated>
-  <id>http://kykim.com//</id>
+  <link href="http://kykim.github.com/blog/categories/tips/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
   <author>
     <name><![CDATA[Kevin Y. Kim]]></name>
     <email><![CDATA[kykim@kykim.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Yes iOS 6 Maps suck, but...]]></title>
-    <link href="http://kykim.com//blog/2012/09/27/yes/"/>
+    <link href="http://kykim.github.com/blog/2012/09/27/yes/"/>
     <updated>2012-09-27T09:56:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/09/27/yes</id>
+    <id>http://kykim.github.com/blog/2012/09/27/yes</id>
     <content type="html"><![CDATA[<p>Honestly, I've been using the new Maps since June of 2012 without any major issues. Right after WWDC, I visited my sister and her family in LA and used the turn-by-turn directions without any problem. Maps even had me avoid the freeway when driving from Hollywood to LAX. I'm sure it still needs a lot of work, but for my infrequent needs, it seems to be okay.</p>
 
 <p>Rather than beat up on Maps, Let's take a look at some cool little features that you might not know about.</p>

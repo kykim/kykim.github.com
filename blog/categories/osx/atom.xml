@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: osx | This Is My Blog]]></title>
-  <link href="http://kykim.com//blog/categories/osx/atom.xml" rel="self"/>
-  <link href="http://kykim.com//"/>
-  <updated>2013-02-18T11:50:28-05:00</updated>
-  <id>http://kykim.com//</id>
+  <link href="http://kykim.github.com/blog/categories/osx/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
   <author>
     <name><![CDATA[Kevin Y. Kim]]></name>
     <email><![CDATA[kykim@kykim.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Accessing Reminders with EventKit (Part 3)]]></title>
-    <link href="http://kykim.com//blog/2012/10/18/accessing-reminders-with-eventkit-part-3/"/>
+    <link href="http://kykim.github.com/blog/2012/10/18/accessing-reminders-with-eventkit-part-3/"/>
     <updated>2012-10-18T11:37:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/10/18/accessing-reminders-with-eventkit-part-3</id>
+    <id>http://kykim.github.com/blog/2012/10/18/accessing-reminders-with-eventkit-part-3</id>
     <content type="html"><![CDATA[<p><em><a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a>, <a href="/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Part 2</a></em></p>
 
 <p>I left off with the <code>rem</code> command-line app parsing the command-line arguments and stubbed out the functions to handle each command. I'm going to finish up the app by fleshing out each command function.</p>
@@ -473,9 +473,9 @@ For expediency's sake, I'm using two functions for output. One for calendars and
   
   <entry>
     <title type="html"><![CDATA[Accessing Reminders with EventKit (Part 2)]]></title>
-    <link href="http://kykim.com//blog/2012/10/15/accessing-reminders-with-eventkit-part-2/"/>
+    <link href="http://kykim.github.com/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/"/>
     <updated>2012-10-15T12:05:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/10/15/accessing-reminders-with-eventkit-part-2</id>
+    <id>http://kykim.github.com/blog/2012/10/15/accessing-reminders-with-eventkit-part-2</id>
     <content type="html"><![CDATA[<p><em><a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a></em></p>
 
 <p>I want a command-line tool to access Reminders.app data. I was inspired by the command-line password manager, <a href="http://zx2c4.com/projects/password-store">pass</a>. Based on the man page, <code>pass</code> uses the following parameters:
@@ -851,9 +851,9 @@ This seems like a good model to follow. I'm going to name this command <code>rem
   
   <entry>
     <title type="html"><![CDATA[Accessing Reminders with EventKit (part 1)]]></title>
-    <link href="http://kykim.com//blog/2012/10/09/accessing-reminders-with-eventkit-part-1/"/>
+    <link href="http://kykim.github.com/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/"/>
     <updated>2012-10-09T15:56:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/10/09/accessing-reminders-with-eventkit-part-1</id>
+    <id>http://kykim.github.com/blog/2012/10/09/accessing-reminders-with-eventkit-part-1</id>
     <content type="html"><![CDATA[<p>I'm old school when it comes to certain things. When the <a href="http://en.wikipedia.org/wiki/PowerBook_G4#Titanium_PowerBook_G4">Titanium Powerbook G4</a> came out, I was excited because I could have six Terminal windows open at once. I still use <a href="http://www.gnu.org/software/emacs/">Emacs</a>. My biggest complaint about Xcode 4 is they got rid of the Emacs client integration.</p>
 
 <p>On the other hand, sometimes newer things work for me as well. When Reminders came out in iOS 5, I started using it, but wasn't diligent about it. Once it got <a href="http://www.apple.com/osx/whats-new/features.html#reminders">iCloud and Mountain Lion integration</a>, I started using it a lot more. I even use <a href="http://www.apple.com/ios/whats-new/#siri">Siri</a> to make a reminder. I make a reminder on my iPhone, and I have it on all my devices, so I actually keep track of things.</p>
@@ -1109,9 +1109,9 @@ As with calendars, there is a method to retrieve a specific reminder if you know
   
   <entry>
     <title type="html"><![CDATA[caffeinate]]></title>
-    <link href="http://kykim.com//blog/2012/08/16/caffeinate/"/>
+    <link href="http://kykim.github.com/blog/2012/08/16/caffeinate/"/>
     <updated>2012-08-16T11:31:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/08/16/caffeinate</id>
+    <id>http://kykim.github.com/blog/2012/08/16/caffeinate</id>
     <content type="html"><![CDATA[<p>Really useful when I don't want the display to sleep on me.</p>
 
 <pre><code>&gt; caffeinate -d

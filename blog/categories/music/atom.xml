@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: music | This Is My Blog]]></title>
+  <link href="http://kykim.github.com/blog/categories/music/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
+  <author>
+    <name><![CDATA[Kevin Y. Kim]]></name>
+    <email><![CDATA[kykim@kykim.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[XPO929 Show Review]]></title>
+    <link href="http://kykim.github.com/blog/2013/04/02/xpo929-show-review/"/>
+    <updated>2013-04-02T18:43:00-04:00</updated>
+    <id>http://kykim.github.com/blog/2013/04/02/xpo929-show-review</id>
+    <content type="html"><![CDATA[<p>Wow, it's been more than two months since my last blog post where I promised to post more. Sorry folks.</p>
+
+<p>In the meantime, here's a review my bandmate found for our show at <a href="http://www.xpo929.com">XPO929</a> last <a href="http://bushwickdaily.com/2012/10/an-uncmj-night-at-xpo-929">October</a>.</p>
+
+<p>By the way, our new record, Freedom Now!, is out now.
+<a href="http://whartontiers.bandcamp.com/album/freedom-now">Bandcamp</a>
+<a href="https://itunes.apple.com/us/album/freedom-now!/id608870670">iTunes</a></p>
+]]></content>
+  </entry>
+  
+</feed>

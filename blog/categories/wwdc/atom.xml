@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: WWDC | This Is My Blog]]></title>
-  <link href="http://kykim.com//blog/categories/wwdc/atom.xml" rel="self"/>
-  <link href="http://kykim.com//"/>
-  <updated>2013-02-18T11:50:28-05:00</updated>
-  <id>http://kykim.com//</id>
+  <link href="http://kykim.github.com/blog/categories/wwdc/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
   <author>
     <name><![CDATA[Kevin Y. Kim]]></name>
     <email><![CDATA[kykim@kykim.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[The First Rule of Secret Sushi]]></title>
-    <link href="http://kykim.com//blog/2012/06/13/the-first-rule-of-secret-sushi/"/>
+    <link href="http://kykim.github.com/blog/2012/06/13/the-first-rule-of-secret-sushi/"/>
     <updated>2012-06-13T23:54:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/06/13/the-first-rule-of-secret-sushi</id>
+    <id>http://kykim.github.com/blog/2012/06/13/the-first-rule-of-secret-sushi</id>
     <content type="html"><![CDATA[<p>Don't tell anyone where it is.</p>
 
 <p>My friend Bruce is a member of the inner circle (cabal?). Everytime I come to San Francisco, I try to get him to take me there. My first time was at WWDC last year. Since then, I've gone three more times, and brought many of my colleagues with me. Now it's expected that I make arrangements for any trip to SF.</p>
@@ -88,9 +88,9 @@ Melon with Meyer lemon. Never had lemon juice on a melon before. It was deliciou
   
   <entry>
     <title type="html"><![CDATA[WWDC Day One]]></title>
-    <link href="http://kykim.com//blog/2012/06/12/wwdc-day-one/"/>
+    <link href="http://kykim.github.com/blog/2012/06/12/wwdc-day-one/"/>
     <updated>2012-06-12T11:10:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/06/12/wwdc-day-one</id>
+    <id>http://kykim.github.com/blog/2012/06/12/wwdc-day-one</id>
     <content type="html"><![CDATA[<p>Hectic first day at WWDC. Rather than recap what others have done better than me, I'll just put up some pictures.</p>
 
 <!-- more -->

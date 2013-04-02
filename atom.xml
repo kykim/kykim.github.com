@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[This Is My Blog]]></title>
-  <link href="http://kykim.com//atom.xml" rel="self"/>
-  <link href="http://kykim.com//"/>
-  <updated>2013-02-18T11:50:28-05:00</updated>
-  <id>http://kykim.com//</id>
+  <link href="http://kykim.github.com/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
   <author>
     <name><![CDATA[Kevin Y. Kim]]></name>
     <email><![CDATA[kykim@kykim.com]]></email>
@@ -14,10 +14,25 @@
 
   
   <entry>
+    <title type="html"><![CDATA[XPO929 Show Review]]></title>
+    <link href="http://kykim.github.com/blog/2013/04/02/xpo929-show-review/"/>
+    <updated>2013-04-02T18:43:00-04:00</updated>
+    <id>http://kykim.github.com/blog/2013/04/02/xpo929-show-review</id>
+    <content type="html"><![CDATA[<p>Wow, it&#8217;s been more than two months since my last blog post where I promised to post more. Sorry folks.</p>
+
+<p>In the meantime, here&#8217;s a review my bandmate found for our show at <a href="http://www.xpo929.com">XPO929</a> last <a href="http://bushwickdaily.com/2012/10/an-uncmj-night-at-xpo-929">October</a>.</p>
+
+<p>By the way, our new record, Freedom Now!, is out now.
+<a href="http://whartontiers.bandcamp.com/album/freedom-now">Bandcamp</a>
+<a href="https://itunes.apple.com/us/album/freedom-now!/id608870670">iTunes</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Happy Belated New Year]]></title>
-    <link href="http://kykim.com//blog/2013/02/18/happy-belated-new-year/"/>
+    <link href="http://kykim.github.com/blog/2013/02/18/happy-belated-new-year/"/>
     <updated>2013-02-18T11:17:00-05:00</updated>
-    <id>http://kykim.com//blog/2013/02/18/happy-belated-new-year</id>
+    <id>http://kykim.github.com/blog/2013/02/18/happy-belated-new-year</id>
     <content type="html"><![CDATA[<p>It&#8217;s been a while since my last post. Without going into too much detail (which I may do later),
 here&#8217;s the quick recap:</p>
 
@@ -39,9 +54,9 @@ here&#8217;s the quick recap:</p>
   
   <entry>
     <title type="html"><![CDATA[iPad mini and Fusion Drive]]></title>
-    <link href="http://kykim.com//blog/2012/10/24/ipad-mini-and-fusion-drive/"/>
+    <link href="http://kykim.github.com/blog/2012/10/24/ipad-mini-and-fusion-drive/"/>
     <updated>2012-10-24T12:38:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/10/24/ipad-mini-and-fusion-drive</id>
+    <id>http://kykim.github.com/blog/2012/10/24/ipad-mini-and-fusion-drive</id>
     <content type="html"><![CDATA[<p><small>
 <em>Update: <a href="http://www.macobserver.com/tmo/article/digging-into-fusion-drive-details">MacObserver</a> has a nice simple explanation of how Fusion Drive works. All the magic is in OSX and Core Storage</em>
 </small></p>
@@ -63,10 +78,10 @@ here&#8217;s the quick recap:</p>
   
   <entry>
     <title type="html"><![CDATA[Accessing Reminders with EventKit (Part 3)]]></title>
-    <link href="http://kykim.com//blog/2012/10/18/accessing-reminders-with-eventkit-part-3/"/>
+    <link href="http://kykim.github.com/blog/2012/10/18/accessing-reminders-with-eventkit-part-3/"/>
     <updated>2012-10-18T11:37:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/10/18/accessing-reminders-with-eventkit-part-3</id>
-    <content type="html"><![CDATA[<p><em><a href="http://kykim.com//blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a>, <a href="http://kykim.com//blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Part 2</a></em></p>
+    <id>http://kykim.github.com/blog/2012/10/18/accessing-reminders-with-eventkit-part-3</id>
+    <content type="html"><![CDATA[<p><em><a href="http://kykim.github.com/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a>, <a href="http://kykim.github.com/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Part 2</a></em></p>
 
 <p>I left off with the <code>rem</code> command-line app parsing the command-line arguments and stubbed out the functions to handle each command. I&#8217;m going to finish up the app by fleshing out each command function.</p>
 
@@ -437,10 +452,10 @@ For expediency&#8217;s sake, I&#8217;m using two functions for output. One for c
   
   <entry>
     <title type="html"><![CDATA[Accessing Reminders with EventKit (Part 2)]]></title>
-    <link href="http://kykim.com//blog/2012/10/15/accessing-reminders-with-eventkit-part-2/"/>
+    <link href="http://kykim.github.com/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/"/>
     <updated>2012-10-15T12:05:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/10/15/accessing-reminders-with-eventkit-part-2</id>
-    <content type="html"><![CDATA[<p><em><a href="http://kykim.com//blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a></em></p>
+    <id>http://kykim.github.com/blog/2012/10/15/accessing-reminders-with-eventkit-part-2</id>
+    <content type="html"><![CDATA[<p><em><a href="http://kykim.github.com/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a></em></p>
 
 <p>I want a command-line tool to access Reminders.app data. I was inspired by the command-line password manager, <a href="http://zx2c4.com/projects/password-store">pass</a>. Based on the man page, <code>pass</code> uses the following parameters:</p>
 
@@ -597,7 +612,7 @@ For expediency&#8217;s sake, I&#8217;m using two functions for output. One for c
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The <code>EKEventStore</code> instance is a global that&#8217;s instantiated at application start. I use it create a predicate to fetch all the reminders across all calendars. Recall that in <a href="http://kykim.com//blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a>, I noted that the event store can be expensive to create and release. For a GUI (Cocoa or iOS), I&#8217;d create the event store in the application delegate and have it persist for the lifetime of the app.</p>
+<p>The <code>EKEventStore</code> instance is a global that&#8217;s instantiated at application start. I use it create a predicate to fetch all the reminders across all calendars. Recall that in <a href="http://kykim.github.com/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a>, I noted that the event store can be expensive to create and release. For a GUI (Cocoa or iOS), I&#8217;d create the event store in the application delegate and have it persist for the lifetime of the app.</p>
 
 <p>I have some funky coding going on here. What&#8217;s up with the <code>while</code> loop after the call to <code>fetchRemindersMatchingPredicate:completion:</code>? I have a boolean flag, <code>fetching</code>, that gets flipped inside the completion handler block. Until it gets flipped, the application&#8217;s <a href="https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSRunLoop_Class/Reference/Reference.html">runloop</a> will run for 1/100th of a second. During this 1/100th of second, the completion handler block <em>may</em> get invoked. If so, the <code>fetching</code> flag will be flipped, and the app will leave the <code>while</code> loop.</p>
 
@@ -760,9 +775,9 @@ For expediency&#8217;s sake, I&#8217;m using two functions for output. One for c
   
   <entry>
     <title type="html"><![CDATA[Accessing Reminders with EventKit (part 1)]]></title>
-    <link href="http://kykim.com//blog/2012/10/09/accessing-reminders-with-eventkit-part-1/"/>
+    <link href="http://kykim.github.com/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/"/>
     <updated>2012-10-09T15:56:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/10/09/accessing-reminders-with-eventkit-part-1</id>
+    <id>http://kykim.github.com/blog/2012/10/09/accessing-reminders-with-eventkit-part-1</id>
     <content type="html"><![CDATA[<p>I&#8217;m old school when it comes to certain things. When the <a href="http://en.wikipedia.org/wiki/PowerBook_G4#Titanium_PowerBook_G4">Titanium Powerbook G4</a> came out, I was excited because I could have six Terminal windows open at once. I still use <a href="http://www.gnu.org/software/emacs/">Emacs</a>. My biggest complaint about Xcode 4 is they got rid of the Emacs client integration.</p>
 
 <p>On the other hand, sometimes newer things work for me as well. When Reminders came out in iOS 5, I started using it, but wasn&#8217;t diligent about it. Once it got <a href="http://www.apple.com/osx/whats-new/features.html#reminders">iCloud and Mountain Lion integration</a>, I started using it a lot more. I even use <a href="http://www.apple.com/ios/whats-new/#siri">Siri</a> to make a reminder. I make a reminder on my iPhone, and I have it on all my devices, so I actually keep track of things.</p>
@@ -994,9 +1009,9 @@ As with calendars, there is a method to retrieve a specific reminder if you know
   
   <entry>
     <title type="html"><![CDATA[Parental Appification]]></title>
-    <link href="http://kykim.com//blog/2012/10/04/parental-appification/"/>
+    <link href="http://kykim.github.com/blog/2012/10/04/parental-appification/"/>
     <updated>2012-10-04T14:15:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/10/04/parental-appification</id>
+    <id>http://kykim.github.com/blog/2012/10/04/parental-appification</id>
     <content type="html"><![CDATA[<p>My seven year old niece is learning how to do addition. One of the
 drills they are doing is given a number, what other number do you need
 to add up to 10. For example, if the teacher says &#8220;one&#8221;, she needs to
@@ -1026,9 +1041,9 @@ number and I&#8217;ll say the answer.&#8221;</p>
   
   <entry>
     <title type="html"><![CDATA[Yes iOS 6 Maps suck, but...]]></title>
-    <link href="http://kykim.com//blog/2012/09/27/yes/"/>
+    <link href="http://kykim.github.com/blog/2012/09/27/yes/"/>
     <updated>2012-09-27T09:56:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/09/27/yes</id>
+    <id>http://kykim.github.com/blog/2012/09/27/yes</id>
     <content type="html"><![CDATA[<p>Honestly, I&#8217;ve been using the new Maps since June of 2012 without any major issues. Right after WWDC, I visited my sister and her family in LA and used the turn-by-turn directions without any problem. Maps even had me avoid the freeway when driving from Hollywood to LAX. I&#8217;m sure it still needs a lot of work, but for my infrequent needs, it seems to be okay.</p>
 
 <p>Rather than beat up on Maps, Let&#8217;s take a look at some cool little features that you might not know about.</p>
@@ -1056,9 +1071,9 @@ Technically, Guided Access is an &#8220;Accessibility&#8221; feature, but I use 
   
   <entry>
     <title type="html"><![CDATA[360iDev]]></title>
-    <link href="http://kykim.com//blog/2012/09/12/360idev/"/>
+    <link href="http://kykim.github.com/blog/2012/09/12/360idev/"/>
     <updated>2012-09-12T16:47:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/09/12/360idev</id>
+    <id>http://kykim.github.com/blog/2012/09/12/360idev</id>
     <content type="html"><![CDATA[<p>Been busy the last month working on a new book.
 And I had to take some time off. But not really.</p>
 
@@ -1074,9 +1089,9 @@ And I had to take some time off. But not really.</p>
   
   <entry>
     <title type="html"><![CDATA[caffeinate]]></title>
-    <link href="http://kykim.com//blog/2012/08/16/caffeinate/"/>
+    <link href="http://kykim.github.com/blog/2012/08/16/caffeinate/"/>
     <updated>2012-08-16T11:31:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/08/16/caffeinate</id>
+    <id>http://kykim.github.com/blog/2012/08/16/caffeinate</id>
     <content type="html"><![CDATA[<p>Really useful when I don&#8217;t want the display to sleep on me.</p>
 
 <pre><code>&gt; caffeinate -d
@@ -1088,9 +1103,9 @@ And I had to take some time off. But not really.</p>
   
   <entry>
     <title type="html"><![CDATA[Greatness]]></title>
-    <link href="http://kykim.com//blog/2012/08/09/greatness/"/>
+    <link href="http://kykim.github.com/blog/2012/08/09/greatness/"/>
     <updated>2012-08-09T23:00:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/08/09/greatness</id>
+    <id>http://kykim.github.com/blog/2012/08/09/greatness</id>
     <content type="html"><![CDATA[<p>Awesome ad.</p>
 
 <iframe width="560" height="315" src="http://www.youtube.com/embed/LsXRj89cWa0" frameborder="0" allowfullscreen></iframe>
@@ -1102,9 +1117,9 @@ And I had to take some time off. But not really.</p>
   
   <entry>
     <title type="html"><![CDATA[Testivus on Code Coverage]]></title>
-    <link href="http://kykim.com//blog/2012/07/24/code-coverage-and-the-zen-master/"/>
+    <link href="http://kykim.github.com/blog/2012/07/24/code-coverage-and-the-zen-master/"/>
     <updated>2012-07-24T20:11:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/07/24/code-coverage-and-the-zen-master</id>
+    <id>http://kykim.github.com/blog/2012/07/24/code-coverage-and-the-zen-master</id>
     <content type="html"><![CDATA[<p>From <a href="http://www.artima.com/forums/flat.jsp?forum=106&amp;thread=204677">Testivus on Test Coverage</a></p>
 
 <p>Early one morning, a programmer asked the great master:<br/>
@@ -1167,9 +1182,9 @@ Replied the master in a stern voice, pounding his fist on the table.</p>
   
   <entry>
     <title type="html"><![CDATA[Parable of the Day]]></title>
-    <link href="http://kykim.com//blog/2012/07/23/parable-of-the-day/"/>
+    <link href="http://kykim.github.com/blog/2012/07/23/parable-of-the-day/"/>
     <updated>2012-07-23T16:09:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/07/23/parable-of-the-day</id>
+    <id>http://kykim.github.com/blog/2012/07/23/parable-of-the-day</id>
     <content type="html"><![CDATA[<p>The Americans and the Japanese decided to engage in a boat race. Both
 teams practiced hard and long to reach their peak performance levels.
 On the big day they felt ready. The Japanese won by a mile. The
@@ -1201,9 +1216,9 @@ performance and gave the managers a bonus for discovering the problem.</p>
   
   <entry>
     <title type="html"><![CDATA[Quote of the Day]]></title>
-    <link href="http://kykim.com//blog/2012/07/13/quote-of-the-day/"/>
+    <link href="http://kykim.github.com/blog/2012/07/13/quote-of-the-day/"/>
     <updated>2012-07-13T18:05:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/07/13/quote-of-the-day</id>
+    <id>http://kykim.github.com/blog/2012/07/13/quote-of-the-day</id>
     <content type="html"><![CDATA[<p><strong>What people say,</strong><br/>
 <strong>What people do,</strong><br/>
 <strong>And</strong><br/>
@@ -1218,9 +1233,9 @@ performance and gave the managers a bonus for discovering the problem.</p>
   
   <entry>
     <title type="html"><![CDATA[iPad Charging Costs $1.36 per Year]]></title>
-    <link href="http://kykim.com//blog/2012/06/25/ipad-charging-costs/"/>
+    <link href="http://kykim.github.com/blog/2012/06/25/ipad-charging-costs/"/>
     <updated>2012-06-25T13:19:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/06/25/ipad-charging-costs</id>
+    <id>http://kykim.github.com/blog/2012/06/25/ipad-charging-costs</id>
     <content type="html"><![CDATA[<p>According to the Electric Power Research Institute <a href="http://www.epri.com/">(ERPI)</a>, it only costs $1.36 per year to charge your iPad <a href="http://www.cultofmac.com/175195/your-new-ipad-costs-just-1-36-per-year-to-charge/">(source)</a>.</p>
 
 <!-- more -->
@@ -1232,9 +1247,9 @@ performance and gave the managers a bonus for discovering the problem.</p>
   
   <entry>
     <title type="html"><![CDATA[The First Rule of Secret Sushi]]></title>
-    <link href="http://kykim.com//blog/2012/06/13/the-first-rule-of-secret-sushi/"/>
+    <link href="http://kykim.github.com/blog/2012/06/13/the-first-rule-of-secret-sushi/"/>
     <updated>2012-06-13T23:54:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/06/13/the-first-rule-of-secret-sushi</id>
+    <id>http://kykim.github.com/blog/2012/06/13/the-first-rule-of-secret-sushi</id>
     <content type="html"><![CDATA[<p>Don&#8217;t tell anyone where it is.</p>
 
 <p>My friend Bruce is a member of the inner circle (cabal?). Everytime I come to San Francisco, I try to get him to take me there. My first time was at WWDC last year. Since then, I&#8217;ve gone three more times, and brought many of my colleagues with me. Now it&#8217;s expected that I make arrangements for any trip to SF.</p>
@@ -1246,68 +1261,68 @@ performance and gave the managers a bonus for discovering the problem.</p>
 
 <h5>We&#8217;ve arrived</h5>
 
-<p><img src="http://kykim.com//images/20120613/01.png" title="We've arrived" >
+<p><img src="http://kykim.github.com/images/20120613/01.png" title="We've arrived" >
 We had to wait for the previous seating (a birthday party) to finish.</p>
 
 <h5>House Rules</h5>
 
-<p><img src="http://kykim.com//images/20120613/02.png" title="House Rules" >
+<p><img src="http://kykim.github.com/images/20120613/02.png" title="House Rules" >
 Rumor has it that you can get banned for violating the rules.</p>
 
 <h5>Start off with some sake</h5>
 
-<p><img src="http://kykim.com//images/20120613/03.png" title="Start off with some sake" >
+<p><img src="http://kykim.github.com/images/20120613/03.png" title="Start off with some sake" >
 Don&#8217;t know if you can tell, but that&#8217;s a big bottle.</p>
 
 <p>I forgot to snap a picture of the first dish. It was mackeral with a ginger soy sauce, garnished with scallions.</p>
 
 <h5>Second Course</h5>
 
-<p><img src="http://kykim.com//images/20120613/04.png" title="Second Course" >
+<p><img src="http://kykim.github.com/images/20120613/04.png" title="Second Course" >
 A salad with calamari, sprouts and dressing.</p>
 
 <h5>Third Course</h5>
 
-<p><img src="http://kykim.com//images/20120613/05.png" title="Third Course" >
+<p><img src="http://kykim.github.com/images/20120613/05.png" title="Third Course" >
 Three mushroom with a soy-based sauce, baked.</p>
 
 <h5>Nobu-san preparing the sashimi</h5>
 
-<p><img src="http://kykim.com//images/20120613/06.png" title="Nobu-san preparing the sashimi" >
+<p><img src="http://kykim.github.com/images/20120613/06.png" title="Nobu-san preparing the sashimi" >
 Our host at work.</p>
 
 <h5>Fourth Course</h5>
 
-<p><img src="http://kykim.com//images/20120613/07.png" title="Fourth Course" >
+<p><img src="http://kykim.github.com/images/20120613/07.png" title="Fourth Course" >
 That&#8217;s a lot of fish!</p>
 
 <h5>Fifth Course</h5>
 
-<p><img src="http://kykim.com//images/20120613/08.png" title="Fifth Course" >
+<p><img src="http://kykim.github.com/images/20120613/08.png" title="Fifth Course" >
 Pumpkin, Burdock (I think) and Zucchini.</p>
 
 <h5>Sixth Course</h5>
 
-<p><img src="http://kykim.com//images/20120613/09.png" title="Sixth Course" >
+<p><img src="http://kykim.github.com/images/20120613/09.png" title="Sixth Course" >
 Neck or Shoulder of a yellow mackeral</p>
 
 <h5>Seventh Course</h5>
 
-<p><img src="http://kykim.com//images/20120613/10.png" title="Seventh Course" >
+<p><img src="http://kykim.github.com/images/20120613/10.png" title="Seventh Course" >
 Broiled Eel. Unagi!</p>
 
 <h5>Dessert</h5>
 
-<p><img src="http://kykim.com//images/20120613/11.png" title="Dessert" >
+<p><img src="http://kykim.github.com/images/20120613/11.png" title="Dessert" >
 Melon with Meyer lemon. Never had lemon juice on a melon before. It was delicious!</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[WWDC Day One]]></title>
-    <link href="http://kykim.com//blog/2012/06/12/wwdc-day-one/"/>
+    <link href="http://kykim.github.com/blog/2012/06/12/wwdc-day-one/"/>
     <updated>2012-06-12T11:10:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/06/12/wwdc-day-one</id>
+    <id>http://kykim.github.com/blog/2012/06/12/wwdc-day-one</id>
     <content type="html"><![CDATA[<p>Hectic first day at WWDC. Rather than recap what others have done better than me, I&#8217;ll just put up some pictures.</p>
 
 <!-- more -->
@@ -1315,32 +1330,32 @@ Melon with Meyer lemon. Never had lemon juice on a melon before. It was deliciou
 
 <h5>Looking for a place in line</h5>
 
-<p><img src="http://kykim.com//images/wwdc2012/1.png" title="Looking for a place in line" ></p>
+<p><img src="http://kykim.github.com/images/wwdc2012/1.png" title="Looking for a place in line" ></p>
 
 <h5>Waiting for the keynote</h5>
 
-<p><img src="http://kykim.com//images/wwdc2012/2.png" title="Waiting for the keynote" ></p>
+<p><img src="http://kykim.github.com/images/wwdc2012/2.png" title="Waiting for the keynote" ></p>
 
 <h5>Tim takes the stage</h5>
 
-<p><img src="http://kykim.com//images/wwdc2012/3.png" title="Tim takes the stage" ></p>
+<p><img src="http://kykim.github.com/images/wwdc2012/3.png" title="Tim takes the stage" ></p>
 
 <h5>(Fuzzy) profile of the new MacBook Pro</h5>
 
-<p><img src="http://kykim.com//images/wwdc2012/4.png" title="(Fuzzy) profile of the new MacBook Pro" ></p>
+<p><img src="http://kykim.github.com/images/wwdc2012/4.png" title="(Fuzzy) profile of the new MacBook Pro" ></p>
 
 <p>I can&#8217;t believe I forgot to take a picture of <a href="http://img.ibtimes.com/www/data/images/full/2012/06/11/280874-craig-federighi-apple-senior-vice-president-software-engineering-stand.jpg">Hair Force One</a></p>
 
 <p>The rest of the day was a blur, and we ended it at a party hosted by our friends at [Crashlytics](http://www.crashlytics.com]
-<img src="http://kykim.com//images/wwdc2012/5.png" title="Party!" ></p>
+<img src="http://kykim.github.com/images/wwdc2012/5.png" title="Party!" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Texts From Xcode]]></title>
-    <link href="http://kykim.com//blog/2012/06/07/texts-from-xcode/"/>
+    <link href="http://kykim.github.com/blog/2012/06/07/texts-from-xcode/"/>
     <updated>2012-06-07T14:38:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/06/07/texts-from-xcode</id>
+    <id>http://kykim.github.com/blog/2012/06/07/texts-from-xcode</id>
     <content type="html"><![CDATA[<p>Hilarious! And so true.
 <a href="http://textfromxcode.tumblr.com/">Texts From Xcode</a></p>
 ]]></content>
@@ -1348,9 +1363,9 @@ Melon with Meyer lemon. Never had lemon juice on a melon before. It was deliciou
   
   <entry>
     <title type="html"><![CDATA[Class Methods in OCMock]]></title>
-    <link href="http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock/"/>
+    <link href="http://kykim.github.com/blog/2012/06/06/mocking-class-methods-in-ocmock/"/>
     <updated>2012-06-06T16:09:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock</id>
+    <id>http://kykim.github.com/blog/2012/06/06/mocking-class-methods-in-ocmock</id>
     <content type="html"><![CDATA[<p>I&#8217;m opening my blog with a post about patches I&#8217;ve made to <a href="http://ocmock.org">OCMock</a> to handle mocking and stubbing class methods. You can find my fork <a href="https://github.com/kykim/ocmock">HERE</a>.</p>
 
 <p>I built on top of the work in progress in the OCMock master. It works, but will probably need some refinement.</p>

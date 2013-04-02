@@ -9,7 +9,7 @@
   <meta name="author" content="Kevin Y. Kim">
 
   
-  <meta name="description" content="Hectic first day at WWDC. Rather than recap what others have done better than me, I&#8217;ll just put up some pictures. ">
+  <meta name="description" content="Don&#8217;t tell anyone where it is. My friend Bruce is a member of the inner circle (cabal?). Everytime I come to San Francisco, I try to get him to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://kykim.com//blog/page/6/">
+  <link rel="canonical" href="http://kykim.github.com/blog/page/6/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -61,7 +61,7 @@
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:kykim.com/" />
+    <input type="hidden" name="q" value="site:kykim.github.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -79,6 +79,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/06/13/the-first-rule-of-secret-sushi/">The First Rule of Secret Sushi</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-13T23:54:00-04:00" pubdate data-updated="true">13-June-2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Don&#8217;t tell anyone where it is.</p>
+
+<p>My friend Bruce is a member of the inner circle (cabal?). Everytime I come to San Francisco, I try to get him to take me there. My first time was at WWDC last year. Since then, I&#8217;ve gone three more times, and brought many of my colleagues with me. Now it&#8217;s expected that I make arrangements for any trip to SF.</p>
+
+<p>This time I brought my colleagues Simon and Sue.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/06/13/the-first-rule-of-secret-sushi/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -158,66 +203,9 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/06/mocking-class-methods-in-ocmock/">Class Methods in OCMock</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-06T16:09:00-04:00" pubdate data-updated="true">06-June-2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;m opening my blog with a post about patches I&#8217;ve made to <a href="http://ocmock.org">OCMock</a> to handle mocking and stubbing class methods. You can find my fork <a href="https://github.com/kykim/ocmock">HERE</a>.</p>
-
-<p>I built on top of the work in progress in the OCMock master. It works, but will probably need some refinement.</p>
-
-<p>Let&#8217;s the example of a static constructor in <code>NSString</code>:</p>
-
-<pre><code>NSString *s = [NSString string];    // returns empty string
-</code></pre>
-
-<p>In order to mock this, we do this:</p>
-
-<pre><code>id mockStringClass = [OCMockObject mockForClassObject:[NSString class]];
-NSString *mockString = @"Mocked String Result";
-[[[mockStringClass stub] andReturn:mockString] string];
-NSString *actualString = [NSString string];
-STAssertTrue(0 != [actualString length], @"Expected String Not Be Empty");
-</code></pre>
-
-<p>I sent the pull request about two weeks ago, still waiting to hear back. Read on if you&#8217;re interested in the details&#8230;</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/06/06/mocking-class-methods-in-ocmock/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/7/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -271,6 +259,10 @@ STAssertTrue(0 != [actualString length], @"Expected String Not Be Empty");
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/02/xpo929-show-review/">XPO929 Show Review</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/18/happy-belated-new-year/">Happy Belated New Year</a>
       </li>
     
@@ -284,10 +276,6 @@ STAssertTrue(0 != [actualString length], @"Expected String Not Be Empty");
     
       <li class="post">
         <a href="/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Accessing Reminders with EventKit (Part 2)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Accessing Reminders with EventKit (part 1)</a>
       </li>
     
   </ul>

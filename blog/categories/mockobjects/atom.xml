@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: MockObjects | This Is My Blog]]></title>
-  <link href="http://kykim.com//blog/categories/mockobjects/atom.xml" rel="self"/>
-  <link href="http://kykim.com//"/>
-  <updated>2013-02-18T11:50:28-05:00</updated>
-  <id>http://kykim.com//</id>
+  <link href="http://kykim.github.com/blog/categories/mockobjects/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
   <author>
     <name><![CDATA[Kevin Y. Kim]]></name>
     <email><![CDATA[kykim@kykim.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Class Methods in OCMock]]></title>
-    <link href="http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock/"/>
+    <link href="http://kykim.github.com/blog/2012/06/06/mocking-class-methods-in-ocmock/"/>
     <updated>2012-06-06T16:09:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/06/06/mocking-class-methods-in-ocmock</id>
+    <id>http://kykim.github.com/blog/2012/06/06/mocking-class-methods-in-ocmock</id>
     <content type="html"><![CDATA[<p>I'm opening my blog with a post about patches I've made to <a href="http://ocmock.org">OCMock</a> to handle mocking and stubbing class methods. You can find my fork <a href="https://github.com/kykim/ocmock">HERE</a>.</p>
 
 <p>I built on top of the work in progress in the OCMock master. It works, but will probably need some refinement.</p>

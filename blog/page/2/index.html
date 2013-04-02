@@ -9,7 +9,7 @@
   <meta name="author" content="Kevin Y. Kim">
 
   
-  <meta name="description" content="Part 1 I want a command-line tool to access Reminders.app data. I was inspired by the command-line password manager, pass. Based on the man page, &hellip;">
+  <meta name="description" content="Part 1, Part 2 I left off with the rem command-line app parsing the command-line arguments and stubbed out the functions to handle each command. I&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://kykim.com//blog/page/2/">
+  <link rel="canonical" href="http://kykim.github.com/blog/page/2/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -61,7 +61,7 @@
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:kykim.com/" />
+    <input type="hidden" name="q" value="site:kykim.github.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -79,6 +79,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/18/accessing-reminders-with-eventkit-part-3/">Accessing Reminders With EventKit (Part 3)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-18T11:37:00-04:00" pubdate data-updated="true">18-October-2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em><a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Part 1</a>, <a href="/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Part 2</a></em></p>
+
+<p>I left off with the <code>rem</code> command-line app parsing the command-line arguments and stubbed out the functions to handle each command. I&#8217;m going to finish up the app by fleshing out each command function.</p>
+
+<p>Before working on the handler functions, I want to do one more thing. I want to check that my command-line arguments actually specify an actual reminder list (calendar) and reminder id (index).</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/10/18/accessing-reminders-with-eventkit-part-3/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -221,50 +266,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/10/04/parental-appification/">Parental Appification</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-04T14:15:00-04:00" pubdate data-updated="true">04-October-2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>My seven year old niece is learning how to do addition. One of the
-drills they are doing is given a number, what other number do you need
-to add up to 10. For example, if the teacher says &#8220;one&#8221;, she needs to
-reply &#8220;nine.&#8221;</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/10/04/parental-appification/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -321,6 +322,10 @@ reply &#8220;nine.&#8221;</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/02/xpo929-show-review/">XPO929 Show Review</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/18/happy-belated-new-year/">Happy Belated New Year</a>
       </li>
     
@@ -334,10 +339,6 @@ reply &#8220;nine.&#8221;</p>
     
       <li class="post">
         <a href="/blog/2012/10/15/accessing-reminders-with-eventkit-part-2/">Accessing Reminders with EventKit (Part 2)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/09/accessing-reminders-with-eventkit-part-1/">Accessing Reminders with EventKit (part 1)</a>
       </li>
     
   </ul>

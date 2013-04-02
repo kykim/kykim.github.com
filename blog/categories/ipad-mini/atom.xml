@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: iPad mini | This Is My Blog]]></title>
-  <link href="http://kykim.com//blog/categories/ipad-mini/atom.xml" rel="self"/>
-  <link href="http://kykim.com//"/>
-  <updated>2013-02-18T11:50:28-05:00</updated>
-  <id>http://kykim.com//</id>
+  <link href="http://kykim.github.com/blog/categories/ipad-mini/atom.xml" rel="self"/>
+  <link href="http://kykim.github.com/"/>
+  <updated>2013-04-02T18:49:49-04:00</updated>
+  <id>http://kykim.github.com/</id>
   <author>
     <name><![CDATA[Kevin Y. Kim]]></name>
     <email><![CDATA[kykim@kykim.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[iPad mini and Fusion Drive]]></title>
-    <link href="http://kykim.com//blog/2012/10/24/ipad-mini-and-fusion-drive/"/>
+    <link href="http://kykim.github.com/blog/2012/10/24/ipad-mini-and-fusion-drive/"/>
     <updated>2012-10-24T12:38:00-04:00</updated>
-    <id>http://kykim.com//blog/2012/10/24/ipad-mini-and-fusion-drive</id>
+    <id>http://kykim.github.com/blog/2012/10/24/ipad-mini-and-fusion-drive</id>
     <content type="html"><![CDATA[<p><small>
 <em>Update: <a href="http://www.macobserver.com/tmo/article/digging-into-fusion-drive-details">MacObserver</a> has a nice simple explanation of how Fusion Drive works. All the magic is in OSX and Core Storage</em>
 </small></p>
