@@ -10,7 +10,7 @@ footer: No
 {% img left /images/kykim_256.png Kevin Y. Kim %}
 Hi there!
 
-I'm a founder and partner of [AppOrchard LLC](http://www.apporchard.com/),
+I'm a founder and partner of [Orchard LLC](http://www.orchardpie.com/),
 a iOS development shop in [New York City](http://www.nyc.gov). I
 graduated from [CMU](http://www.cmu.edu) in 1991 with a B.S. in
 Physics and Philosophy. I saw my first 
